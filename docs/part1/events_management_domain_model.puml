@@ -1,0 +1,15 @@
+@startuml
+class Student {
+    void RSVP(Event event)
+}
+class StudentClub {
+    Event[] events
+}
+class Event {
+    StudentClub studentClub
+}
+
+Student "0..*" -- "0..*" Event : RSVP
+
+@enduml
+
