@@ -98,6 +98,7 @@ class Event {
     DateTime datetime
     int availableCapacity
     Venue location
+    int cost
     List<RSVP> allRSVPs
     addRSVP(RSVP rsvp)
     cancelRsvp(RSVP rsvp)
