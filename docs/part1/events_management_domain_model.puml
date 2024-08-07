@@ -27,6 +27,8 @@ class StudentClub {
     Student[] clubMembers
     AdminStudent[] admins
     privilegedMembers[] privilegedMembers
+    boolean fundingApplication
+    FundingApplication application
     void addMembers(Student student)
     void addAdmins(Student clubMember)
     Event createEvent(String eventTitle, String eventDescription, DateTime datetime, \
@@ -37,7 +39,16 @@ class StudentClub {
     void addPrivilege(Student clubMember, AdminStudent clubAdmin)
     void revokePrivilege(Student privilegedMembers, AdminStudent clubAdmin)
     List<Event> getUpcomingEvent()
+    FundingApplication createFundingApplication(String fundingDescription, \
+    float amountOfFunding)
+    void modifyFundingApplication(FundingApplication fundingApplication, String newFundingDescription, \
+    float newAmountOfFunding)
+    void cancelFundingApplication(FundingApplication fundingApplication)
 }
+
+note left of StudentClub::fundingApplication
+    only can submit one application per semester
+end note
 
 class Venue {
     int venueID
@@ -66,11 +77,47 @@ note "Type of venue" as N3
 Venue .. N3
 N3 .. VenueType
 
-Student "0..*" -- "0..*" Event : rsvp >
-AdminStudent "1..*" -- "1..*" StudentClub : administrateClub
-Student "0..*" -- "0..*" StudentClub : joinClub
-StudentClub "0..*" -- "1" Event : createEvent, amendEvent, cancelEvent
+class FundingApplication {
+    int applicationID
+    String fundingDescription
+    float amountOfFunding
+    ApplicationStatus status
+    void submit()
+    void cancel()
+    void review()
+    void approve()
+    void reject()
+}
 
+note left of FundingApplication::cancel()
+    can only be canceled when it's not approved or rejected
+end note
+
+enum ApplicationStatus {
+    IN_DRAFT
+    SUBMITTED
+    IN_REVIEW
+    APPROVED
+    REJECTED
+}
+
+note "Status of funding application" as N4
+ApplicationStatus .. N4
+N4 .. FundingApplication
+
+class FacultyAdministrator {
+    void reviewFundingApplication(FundingApplication fundingApplication)
+    void approveFundingApplication(FundingApplication fundingApplication)
+    void rejectFundingApplication(FundingApplication fundingApplication)
+}
+
+Student "0..*" -- "0..*" Event : rsvp >
+AdminStudent "1..*" -- "1..*" StudentClub : administrateClub >
+Student "0..*" -- "0..*" StudentClub : joinClub >
+StudentClub "0..*" -- "1" Event : createEvent, amendEvent, cancelEvent >
+StudentClub "1" -- "0..1" FundingApplication : createFundingApplication, \
+modifyFundingApplication, cancelFundingApplication >
+FacultyAdministrator "1" -- "0..*" FundingApplication : review, approve, reject >
 
 
 @enduml
