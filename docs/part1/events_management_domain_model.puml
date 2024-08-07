@@ -1,8 +1,11 @@
 @startuml
 class Student {
     StudentClub[] clubs
-    void RSVP(Event event)
+    List<Event> upcomingEvents
+    List<Event> pastEvents
+    void rsvp(Event event)
     void joinClub(StudentClub studentClub)
+    List<Event> viewAllUpcomingEvents()
 }
 note left of Student: Student who is a member of a club can create, amend and cancel event if \
 they have privilege
@@ -10,7 +13,7 @@ they have privilege
 class AdminStudent extends Student {
     StudentClub[] administrated
     void administrateClub(StudentClub studentClub)
-    List<Event> viewUpcomingEvent(StudentClub clubAdministrated))
+    List<Event> viewClubUpcomingEvent(StudentClub clubAdministrated))
 }
 note left of AdminStudent: club admins can invite or revoke administrator privilege \
 for other club members.
@@ -19,7 +22,6 @@ note "inheritance" as N1
 Student .. N1
 N1 .. AdminStudent
 
-
 class StudentClub {
     List<Event> events
     Student[] clubMembers
@@ -27,26 +29,44 @@ class StudentClub {
     privilegedMembers[] privilegedMembers
     void addMembers(Student student)
     void addAdmins(Student clubMember)
-    Event createEvent(String eventTitle, String eventDescription, int capacity, \
-    int location)
+    Event createEvent(String eventTitle, String eventDescription, DateTime datetime, \
+    Venue location)
     void amendEvent(Event event, String newEventTitle, String newEventDescription, \
-    int newCapacity, int newLocation)
+    DateTime newDatetime, Venue newLocation)
     void cancelEvent(Event event)
     void addPrivilege(Student clubMember, AdminStudent clubAdmin)
     void revokePrivilege(Student privilegedMembers, AdminStudent clubAdmin)
     List<Event> getUpcomingEvent()
 }
 
+class Venue {
+    int venueID
+    String address
+    int capacity
+    VenueType type
+}
+
+enum VenueType {
+    IN_PERSON
+    ONLINE
+}
 
 class Event {
     StudentClub studentClub
     String eventTitle
     String eventDescription
-    int capacity
-    int location
+    DateTime datetime
+    Venue location
 }
 
-Student "0..*" -- "0..*" Event : RSVP
+note "venue of the event" as N2
+Event .. N2
+N2 .. Venue
+note "Type of venue" as N3
+Venue .. N3
+N3 .. VenueType
+
+Student "0..*" -- "0..*" Event : rsvp >
 AdminStudent "1..*" -- "1..*" StudentClub : administrateClub
 Student "0..*" -- "0..*" StudentClub : joinClub
 StudentClub "0..*" -- "1" Event : createEvent, amendEvent, cancelEvent
