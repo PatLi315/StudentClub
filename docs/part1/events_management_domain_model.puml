@@ -1,15 +1,57 @@
 @startuml
 class Student {
+    StudentClub[] clubs
     void RSVP(Event event)
+    void joinClub(StudentClub studentClub)
 }
+note left of Student: Student who is a member of a club can create, amend and cancel event if \
+they have privilege
+
+class AdminStudent extends Student {
+    StudentClub[] administrated
+    void administrateClub(StudentClub studentClub)
+    List<Event> viewUpcomingEvent(StudentClub clubAdministrated))
+}
+note left of AdminStudent: club admins can invite or revoke administrator privilege \
+for other club members.
+
+note "inheritance" as N1
+Student .. N1
+N1 .. AdminStudent
+
+
 class StudentClub {
-    Event[] events
+    List<Event> events
+    Student[] clubMembers
+    AdminStudent[] admins
+    privilegedMembers[] privilegedMembers
+    void addMembers(Student student)
+    void addAdmins(Student clubMember)
+    Event createEvent(String eventTitle, String eventDescription, int capacity, \
+    int location)
+    void amendEvent(Event event, String newEventTitle, String newEventDescription, \
+    int newCapacity, int newLocation)
+    void cancelEvent(Event event)
+    void addPrivilege(Student clubMember, AdminStudent clubAdmin)
+    void revokePrivilege(Student privilegedMembers, AdminStudent clubAdmin)
+    List<Event> getUpcomingEvent()
 }
+
+
 class Event {
     StudentClub studentClub
+    String eventTitle
+    String eventDescription
+    int capacity
+    int location
 }
 
 Student "0..*" -- "0..*" Event : RSVP
+AdminStudent "1..*" -- "1..*" StudentClub : administrateClub
+Student "0..*" -- "0..*" StudentClub : joinClub
+StudentClub "0..*" -- "1" Event : createEvent, amendEvent, cancelEvent
+
+
 
 @enduml
 
