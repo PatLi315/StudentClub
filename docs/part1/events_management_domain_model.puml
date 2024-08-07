@@ -1,14 +1,36 @@
 @startuml
 class Student {
+    int studentID
     StudentClub[] clubs
-    List<Event> upcomingEvents
+    Set<Event> upcomingEvents
     List<Event> pastEvents
-    void rsvp(Event event)
+    List<RSVP> rsvpSubmissions
+    void rsvp(Event event, List<Student> students)
     void joinClub(StudentClub studentClub)
     List<Event> viewAllUpcomingEvents()
+    List<Event> viewAllPastEvents()
+    void cancelRsvp(List<Student> cancelStudents, Event event)
 }
 note left of Student: Student who is a member of a club can create, amend and cancel event if \
 they have privilege
+
+note right of Student::rsvp
+    if there is capacity
+end note
+
+note left of Student::cancelRsvp
+    before the event date and time
+end note
+
+note right of Student::upcomingEvents
+    each student can have only one RSVP for a event
+end note
+
+class RSVP {
+    int rsvpID
+    Student rsvpStudents
+    Event event
+}
 
 class AdminStudent extends Student {
     StudentClub[] administrated
@@ -74,7 +96,11 @@ class Event {
     String eventTitle
     String eventDescription
     DateTime datetime
+    int availableCapacity
     Venue location
+    List<RSVP> allRSVPs
+    addRSVP(RSVP rsvp)
+    cancelRsvp(RSVP rsvp)
 }
 
 note "venue of the event" as N2
@@ -126,6 +152,8 @@ StudentClub "0..*" -- "1" Event : createEvent, amendEvent, cancelEvent >
 StudentClub "1" -- "0..1" FundingApplication : createFundingApplication, \
 modifyFundingApplication, cancelFundingApplication >
 FacultyAdministrator "1" -- "0..*" FundingApplication : review, approve, reject >
+Student "1" -- "0..*" RSVP : submit >
+Event "1" -- "0..*" RSVP : has >
 
 
 @enduml
