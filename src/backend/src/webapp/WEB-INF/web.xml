@@ -1,7 +1,7 @@
 <web-app>
     <servlet>
         <servlet-name>EventServlet</servlet-name>
-        <servlet-class>com.example.EventServlet</servlet-class>
+        <servlet-class>com.studentClub.EventServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EventServlet</servlet-name>

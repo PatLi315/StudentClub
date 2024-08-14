@@ -1,4 +1,4 @@
-package com.studentclub;
+package com.studentClub;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
