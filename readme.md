@@ -17,7 +17,7 @@ To be finalised...
 ---
 
 ### Realease Tags
-Part 1B submission: https://github.com/feit-swen90007-2024/NoTeamName/releases/tag/SWEN90007_2024_Part1B_NoTeamName
+Part 1B submission: https://github.com/feit-swen90007-2024/NoTeamName/releases/tag/SWEN90007_2024_Part1B_NoTeamName<br>
 Part 1A submission: https://github.com/feit-swen90007-2024/NoTeamName/releases/tag/SWEN90007_2024_Part1_NoTeamName
 
 ---
