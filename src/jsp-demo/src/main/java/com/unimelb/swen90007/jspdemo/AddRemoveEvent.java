@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet("/eventServlet")
 public class AddRemoveEvent extends HttpServlet {
 
-    private static final String JDBC_URL = "postgresql://swen90007_react_example_owner:hM8S2usBWZOnQBtiIM7gdZNC1k5CaUBc@dpg-cqvciotsvqrc73c0c5d0-a.singapore-postgres.render.com/swen90007_react_example_xxzg";
+    private static final String JDBC_URL = "jdbc:postgresql://dpg-cqvciotsvqrc73c0c5d0-a.singapore-postgres.render.com:5432/swen90007_react_example_xxzg";
     private static final String JDBC_USER = "swen90007_react_example_owner";
     private static final String JDBC_PASSWORD = "hM8S2usBWZOnQBtiIM7gdZNC1k5CaUBc";
 
