@@ -22,7 +22,7 @@ Part 1A submission: https://github.com/feit-swen90007-2024/NoTeamName/releases/t
 
 ---
 
-### Deployed App
+### Deployed App (Provisional)
 https://swen90007-version3.onrender.com/jsp-demo/
 
 ---
