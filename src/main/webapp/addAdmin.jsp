@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create New Event</title>
+    <title>Add Admin to Club</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,13 +14,9 @@
         form {
             margin-top: 20px;
         }
-        label, input, textarea {
+        label, input {
             display: block;
             margin-bottom: 10px;
-        }
-        input[type="text"], input[type="date"], textarea {
-            padding: 8px;
-            width: 300px;
         }
         input[type="number"] {
             padding: 8px;
@@ -39,21 +35,15 @@
     </style>
 </head>
 <body>
-<h2>Create a New Event</h2>
-<form action="addEvent" method="post">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required>
-
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required></textarea>
-
-    <label for="eventDate">Date:</label>
-    <input type="date" id="eventDate" name="eventDate" required>
+<h2>Add Admin to Club</h2>
+<form action="addAdmin" method="post">
+    <label for="studentId">Student ID:</label>
+    <input type="number" id="studentId" name="studentId" required>
 
     <label for="clubId">Club ID:</label>
     <input type="number" id="clubId" name="clubId" required>
 
-    <input type="submit" value="Create Event">
+    <input type="submit" value="Add Admin">
 </form>
 </body>
 </html>

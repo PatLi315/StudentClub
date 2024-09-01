@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RSVP to Event</title>
+  <title>Remove Admin from Club</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,26 +24,26 @@
     }
     input[type="submit"] {
       padding: 8px 16px;
-      background-color: #007bff;
+      background-color: #d9534f;
       color: #fff;
       border: none;
       cursor: pointer;
     }
     input[type="submit"]:hover {
-      background-color: #0056b3;
+      background-color: #c9302c;
     }
   </style>
 </head>
 <body>
-<h2>RSVP to an Event</h2>
-<form action="addRSVP" method="post">
+<h2>Remove Admin from Club</h2>
+<form action="removeAdmin" method="post">
   <label for="studentId">Student ID:</label>
   <input type="number" id="studentId" name="studentId" required>
 
-  <label for="eventId">Event ID:</label>
-  <input type="number" id="eventId" name="eventId" required>
+  <label for="clubId">Club ID:</label>
+  <input type="number" id="clubId" name="clubId" required>
 
-  <input type="submit" value="RSVP">
+  <input type="submit" value="Remove Admin">
 </form>
 </body>
 </html>
