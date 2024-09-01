@@ -8,29 +8,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
-//@WebServlet("/displayEvents")
 public class DisplayEventsServlet extends HttpServlet {
 
     private EventDAO eventDAO;
 
+    @Override
     public void init() {
         eventDAO = new EventDAO();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Retrieve the list of events from the database
+        List<Event> events = null;
         try {
-            List<Event> eventList = eventDAO.listAllEvents();
-            request.setAttribute("eventList", eventList);
-            request.getRequestDispatcher("displayEvents.jsp").forward(request, response);
-        } catch (SQLException e) {
+            events = eventDAO.listAllEvents();
+        } catch (Exception e) {
             e.printStackTrace();
+            // Handle exception, maybe redirect to an error page
         }
+
+        // Set the events list as a request attribute
+        request.setAttribute("events", events);
+
+        // Forward the request to the JSP page to display the events
+        request.getRequestDispatcher("displayEvents.jsp").forward(request, response);
     }
 }
