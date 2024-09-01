@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 
-@WebServlet("/modifyEvent")
 public class ModifyEventServlet extends HttpServlet {
 
     private EventDAO eventDAO;
