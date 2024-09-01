@@ -28,6 +28,6 @@ public class CancelEventServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        response.sendRedirect("adminDashboard.jsp"); // Redirect to admin dashboard or confirmation page
+        response.sendRedirect("admin.jsp"); // Redirect to admin dashboard or confirmation page
     }
 }

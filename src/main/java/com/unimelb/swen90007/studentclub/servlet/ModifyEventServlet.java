@@ -28,13 +28,13 @@ public class ModifyEventServlet extends HttpServlet {
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         Date eventDate = Date.valueOf(request.getParameter("eventDate"));
-        int clubId = (int) request.getSession().getAttribute("clubId"); // Assuming clubId is stored in session
+        int clubId = (int) request.getSession().getAttribute("clubId");
         Event event = new Event(eventId, title, description, eventDate, clubId);
         try {
             eventDAO.updateEvent(event);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        response.sendRedirect("adminDashboard.jsp"); // Redirect to admin dashboard or confirmation page
+        response.sendRedirect("index.jsp"); // Redirect to admin dashboard or confirmation page
     }
 }

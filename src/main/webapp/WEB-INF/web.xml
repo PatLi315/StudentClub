@@ -62,7 +62,6 @@
         <url-pattern>/listClubs</url-pattern>
     </servlet-mapping>
 
-
     <!-- Add Admin Servlet -->
     <servlet>
         <servlet-name>AddAdminServlet</servlet-name>
