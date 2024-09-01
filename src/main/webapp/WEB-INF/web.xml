@@ -52,6 +52,17 @@
         <url-pattern>/addClub</url-pattern>
     </servlet-mapping>
 
+    <!-- List Clubs Servlet -->
+    <servlet>
+        <servlet-name>ListClubsServlet</servlet-name>
+        <servlet-class>com.unimelb.swen90007.studentclub.servlet.ListClubsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListClubsServlet</servlet-name>
+        <url-pattern>/listClubs</url-pattern>
+    </servlet-mapping>
+
+
     <!-- Add Admin Servlet -->
     <servlet>
         <servlet-name>AddAdminServlet</servlet-name>

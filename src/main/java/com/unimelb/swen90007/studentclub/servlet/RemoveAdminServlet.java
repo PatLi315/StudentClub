@@ -22,8 +22,22 @@ public class RemoveAdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int studentId = Integer.parseInt(request.getParameter("studentId"));
-        int clubId = (int) request.getSession().getAttribute("clubId"); // Assuming clubId is stored in session
-        adminDAO.removeAdmin(studentId, clubId);
-        response.sendRedirect("adminDashboard.jsp"); // Redirect to admin dashboard or confirmation page
+        int clubId = Integer.parseInt(request.getParameter("clubId"));
+
+        try {
+            adminDAO.removeAdmin(studentId, clubId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception, maybe redirect to an error page
+        }
+
+        // Redirect back to the index page
+        response.sendRedirect("index.jsp");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("removeAdmin.jsp").forward(request, response);
     }
 }
