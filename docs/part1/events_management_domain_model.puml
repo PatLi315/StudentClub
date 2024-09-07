@@ -1,0 +1,161 @@
+@startuml
+class Student {
+    int studentID
+    StudentClub[] clubs
+    Set<Event> upcomingEvents
+    List<Event> pastEvents
+    List<RSVP> rsvpSubmissions
+    void rsvp(Event event, List<Student> students)
+    void joinClub(StudentClub studentClub)
+    List<Event> viewAllUpcomingEvents()
+    List<Event> viewAllPastEvents()
+    void cancelRsvp(List<Student> cancelStudents, Event event)
+}
+note left of Student: Student who is a member of a club can create, amend and cancel event if \
+they have privilege
+
+note right of Student::rsvp
+    if there is capacity
+end note
+
+note left of Student::cancelRsvp
+    before the event date and time
+end note
+
+note right of Student::upcomingEvents
+    each student can have only one RSVP for a event
+end note
+
+class RSVP {
+    int rsvpID
+    Student rsvpStudents
+    Event event
+}
+
+class AdminStudent extends Student {
+    StudentClub[] administrated
+    void administrateClub(StudentClub studentClub)
+    List<Event> viewClubUpcomingEvent(StudentClub clubAdministrated))
+    List<FundingApplication> viewAllFundingApplication(StudentClub clubAdministrated))
+}
+note left of AdminStudent: club admins can invite or revoke administrator privilege \
+for other club members.
+
+note "inheritance" as N1
+Student .. N1
+N1 .. AdminStudent
+
+class StudentClub {
+    List<Event> events
+    Student[] clubMembers
+    AdminStudent[] admins
+    privilegedMembers[] privilegedMembers
+    boolean fundingApplication
+    List<FundingApplication> application
+    int availableFunding
+    void addMembers(Student student)
+    void addAdmins(Student clubMember)
+    Event createEvent(String eventTitle, String eventDescription, DateTime datetime, \
+    Venue location, int cost)
+    void amendEvent(Event event, String newEventTitle, String newEventDescription, \
+    DateTime newDatetime, Venue newLocation, int newCost)
+    void cancelEvent(Event event)
+    void addPrivilege(Student clubMember, AdminStudent clubAdmin)
+    void revokePrivilege(Student privilegedMembers, AdminStudent clubAdmin)
+    List<Event> getUpcomingEvent()
+    FundingApplication createFundingApplication(String fundingDescription, \
+    float amountOfFunding)
+    void modifyFundingApplication(FundingApplication fundingApplication, String newFundingDescription, \
+    float newAmountOfFunding)
+    void cancelFundingApplication(FundingApplication fundingApplication)
+    List<FundingApplication> viewAllFundingApplication()
+}
+
+note right of StudentClub::fundingApplication
+    only can submit one application per semester
+end note
+
+note right of StudentClub::createEvent
+    cost must be less or equal to the amount of availableFunding
+end note
+
+class Venue {
+    int venueID
+    String address
+    int capacity
+    VenueType type
+}
+
+enum VenueType {
+    IN_PERSON
+    ONLINE
+}
+
+class Event {
+    StudentClub studentClub
+    String eventTitle
+    String eventDescription
+    DateTime datetime
+    int availableCapacity
+    Venue location
+    int cost
+    List<RSVP> allRSVPs
+    addRSVP(RSVP rsvp)
+    cancelRsvp(RSVP rsvp)
+}
+
+note "venue of the event" as N2
+Event .. N2
+N2 .. Venue
+note "Type of venue" as N3
+Venue .. N3
+N3 .. VenueType
+
+class FundingApplication {
+    int applicationID
+    String fundingDescription
+    float amountOfFunding
+    ApplicationStatus status
+    void submit()
+    void cancel()
+    void review()
+    void approve()
+    void reject()
+}
+
+note left of FundingApplication::cancel()
+    can only be canceled when it's not approved or rejected
+end note
+
+enum ApplicationStatus {
+    IN_DRAFT
+    SUBMITTED
+    IN_REVIEW
+    APPROVED
+    REJECTED
+}
+
+note "Status of funding application" as N4
+ApplicationStatus .. N4
+N4 .. FundingApplication
+
+class FacultyAdministrator {
+    void reviewFundingApplication(FundingApplication fundingApplication)
+    void approveFundingApplication(FundingApplication fundingApplication)
+    void rejectFundingApplication(FundingApplication fundingApplication)
+    List<FundingApplication> viewAllFundingApplication()
+}
+
+Student "0..*" -- "0..*" Event : rsvp >
+AdminStudent "1..*" -- "1..*" StudentClub : administrateClub >
+Student "0..*" -- "0..*" StudentClub : joinClub >
+StudentClub "0..*" -- "1" Event : createEvent, amendEvent, cancelEvent >
+StudentClub "1" -- "0..1" FundingApplication : createFundingApplication, \
+modifyFundingApplication, cancelFundingApplication >
+FacultyAdministrator "1" -- "0..*" FundingApplication : review, approve, reject >
+Student "1" -- "0..*" RSVP : submit >
+Event "1" -- "0..*" RSVP : has >
+
+
+@enduml
+
