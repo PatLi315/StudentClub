@@ -60,4 +60,23 @@ public class EventDAO {
             preparedStatement.executeUpdate();
         }
     }
+
+    public List<Event> searchUpcomingEvents(String searchQuery) throws SQLException {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT * FROM events WHERE title ILIKE ? OR event_date >= CURRENT_DATE";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, "%" + searchQuery + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                Date eventDate = rs.getDate("event_date");
+                int clubId = rs.getInt("club_id");
+                events.add(new Event(id, title, description, eventDate, clubId));
+            }
+        }
+        return events;
+    }
 }

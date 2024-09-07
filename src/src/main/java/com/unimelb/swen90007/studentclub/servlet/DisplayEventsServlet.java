@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DisplayEventsServlet extends HttpServlet {
@@ -23,19 +24,23 @@ public class DisplayEventsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Retrieve the list of events from the database
-        List<Event> events = null;
+
+        // Get search query (for future events)
+        String search = request.getParameter("search");
+        List<Event> events;
+
         try {
-            events = eventDAO.listAllEvents();
-        } catch (Exception e) {
+            if (search != null && !search.isEmpty()) {
+                events = eventDAO.searchUpcomingEvents(search); // Implement this method in EventDAO
+            } else {
+                events = eventDAO.listAllEvents();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            // Handle exception, maybe redirect to an error page
+            events = null; // Handle properly in JSP
         }
 
-        // Set the events list as a request attribute
         request.setAttribute("events", events);
-
-        // Forward the request to the JSP page to display the events
         request.getRequestDispatcher("displayEvents.jsp").forward(request, response);
     }
 }

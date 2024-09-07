@@ -31,6 +31,11 @@
     </style>
 </head>
 <body>
+<form method="get" action="displayEvents">
+    <label for="search">Search for upcoming events:</label>
+    <input type="text" name="search" id="search" placeholder="Event title or date">
+    <input type="submit" value="Search">
+</form>
 <h2>Event List</h2>
 <ul>
     <%
@@ -42,7 +47,6 @@
         <strong>Title:</strong> <%= event.getTitle() %>
         <strong>Description:</strong> <%= event.getDescription() %>
         <strong>Date:</strong> <%= event.getEventDate() %>
-        <strong>Club ID:</strong> <%= event.getClubId() %>
     </li>
     <%
         }
@@ -53,5 +57,7 @@
         }
     %>
 </ul>
+
+
 </body>
 </html>
