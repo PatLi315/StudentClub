@@ -8,6 +8,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
@@ -24,6 +26,14 @@ public class AddEventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);  // Do not create a session
+        if (session == null || session.getAttribute("student") == null) {
+            // User not logged in, redirect to login page
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         // Retrieve event data from the form
         String title = request.getParameter("title");
         String description = request.getParameter("description");

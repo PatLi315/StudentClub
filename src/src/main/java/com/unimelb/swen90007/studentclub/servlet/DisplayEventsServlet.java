@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 public class DisplayEventsServlet extends HttpServlet {
 
@@ -23,19 +25,30 @@ public class DisplayEventsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Retrieve the list of events from the database
-        List<Event> events = null;
-        try {
-            events = eventDAO.listAllEvents();
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle exception, maybe redirect to an error page
+
+        HttpSession session = request.getSession(false);  // Do not create a session
+        if (session == null || session.getAttribute("student") == null) {
+            // User not logged in, redirect to login page
+            response.sendRedirect("login.jsp");
+            return;
         }
 
-        // Set the events list as a request attribute
-        request.setAttribute("events", events);
+        // Get search query (for future events)
+        String search = request.getParameter("search");
+        List<Event> events;
 
-        // Forward the request to the JSP page to display the events
+        try {
+            if (search != null && !search.isEmpty()) {
+                events = eventDAO.searchUpcomingEvents(search); // Implement this method in EventDAO
+            } else {
+                events = eventDAO.listAllEvents();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            events = null; // Handle properly in JSP
+        }
+
+        request.setAttribute("events", events);
         request.getRequestDispatcher("displayEvents.jsp").forward(request, response);
     }
 }
