@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import jakarta.servlet.http.HttpSession;
 
 public class CancelRSVPServlet extends HttpServlet {
 
@@ -22,6 +23,14 @@ public class CancelRSVPServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);  // Do not create a session
+        if (session == null || session.getAttribute("student") == null) {
+            // User not logged in, redirect to login page
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         int studentId = Integer.parseInt(request.getParameter("studentId"));
         int eventId = Integer.parseInt(request.getParameter("eventId"));
 
@@ -41,7 +50,6 @@ public class CancelRSVPServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Forward to a JSP page for confirmation (optional)
         request.getRequestDispatcher("cancelRSVP.jsp").forward(request, response);
     }
 }

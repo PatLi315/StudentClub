@@ -35,7 +35,7 @@
 <ul>
   <%
     List<Club> clubs = (List<Club>) request.getAttribute("clubs");
-    if (clubs != null && !clubs.isEmpty()) {
+    if (clubs != null) {
       for (Club club : clubs) {
   %>
   <li>

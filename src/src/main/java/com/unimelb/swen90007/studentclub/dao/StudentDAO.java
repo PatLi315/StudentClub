@@ -14,6 +14,7 @@ public class StudentDAO {
     private static final String SELECT_ALL_STUDENTS = "SELECT * FROM students";
     private static final String UPDATE_STUDENT_SQL = "UPDATE students SET name = ?, email = ?, password = ? WHERE id = ?";
     private static final String DELETE_STUDENT_SQL = "DELETE FROM students WHERE id = ?";
+    private static final String AUTHENTICATE_STUDENT_SQL = "SELECT * FROM students WHERE email = ? AND password = ?";
 
     // Add a new student to the database
     public void addStudent(Student student) throws SQLException {
@@ -80,5 +81,22 @@ public class StudentDAO {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         }
+    }
+
+    public Student authenticateStudent(String email, String password) throws SQLException {
+        Student student = null;
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(AUTHENTICATE_STUDENT_SQL)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                student = new Student(id, name, email, password);
+            }
+        }
+        return student;  // Return null if authentication fails
     }
 }

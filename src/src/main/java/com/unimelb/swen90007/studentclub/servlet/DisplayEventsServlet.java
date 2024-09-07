@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 public class DisplayEventsServlet extends HttpServlet {
 
@@ -24,6 +25,13 @@ public class DisplayEventsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);  // Do not create a session
+        if (session == null || session.getAttribute("student") == null) {
+            // User not logged in, redirect to login page
+            response.sendRedirect("login.jsp");
+            return;
+        }
 
         // Get search query (for future events)
         String search = request.getParameter("search");
