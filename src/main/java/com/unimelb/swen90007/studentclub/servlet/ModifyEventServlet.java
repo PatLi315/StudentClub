@@ -11,30 +11,41 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class ModifyEventServlet extends HttpServlet {
 
     private EventDAO eventDAO;
 
     @Override
-    public void init() {
+    public void init() throws ServletException {
         eventDAO = new EventDAO();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        int id = Integer.parseInt(request.getParameter("id"));
         String title = request.getParameter("title");
         String description = request.getParameter("description");
-        Date eventDate = Date.valueOf(request.getParameter("eventDate"));
-        int clubId = (int) request.getSession().getAttribute("clubId");
-        Event event = new Event(eventId, title, description, eventDate, clubId);
+        LocalDate localDate = LocalDate.parse(request.getParameter("eventDate"));
+        Date eventDate = Date.valueOf(localDate);
+        int clubId = Integer.parseInt(request.getParameter("clubId"));
+
+        Event event = new Event(id, title, description, eventDate, clubId);
+
         try {
             eventDAO.updateEvent(event);
+            response.sendRedirect("displayEvents");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to modify event");
         }
-        response.sendRedirect("index.jsp"); // Redirect to admin dashboard or confirmation page
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("modifyEvent.jsp").forward(request, response);
     }
 }

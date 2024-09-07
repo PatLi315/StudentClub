@@ -17,25 +17,20 @@ public class ListClubsServlet extends HttpServlet {
     private ClubDAO clubDAO;
 
     @Override
-    public void init() {
+    public void init() throws ServletException {
         clubDAO = new ClubDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Club> clubs = null;
         try {
-            clubs = clubDAO.listAllClubs();
+            List<Club> clubs = clubDAO.listAllClubs();
+            request.setAttribute("clubs", clubs);
+            request.getRequestDispatcher("listClubs.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle exception (e.g., log it and display an error page)
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve clubs");
         }
-
-        // Set the list of clubs as a request attribute
-        request.setAttribute("clubs", clubs);
-
-        // Forward the request to the JSP page for display
-        request.getRequestDispatcher("listClubs.jsp").forward(request, response);
     }
 }

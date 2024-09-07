@@ -39,7 +39,7 @@
       for (Club club : clubs) {
   %>
   <li>
-    <strong>ID:</strong> <%= club.getId() %>
+    <strong>ID:</strong> <%= club.getId() %><br>
     <strong>Name:</strong> <%= club.getName() %>
   </li>
   <%

@@ -1,26 +1,59 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Patrick
-  Date: 2024/8/23
-  Time: 0:41
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Event</title>
+    <title>Create New Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label, input, textarea {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="date"], textarea {
+            padding: 8px;
+            width: 300px;
+        }
+        input[type="number"] {
+            padding: 8px;
+            width: 100px;
+        }
+        input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h2>Add Event</h2>
+<h2>Create a New Event</h2>
 <form action="addEvent" method="post">
-    <label for="title">Event Title:</label>
-    <input type="text" id="title" name="title"><br><br>
-    <label for="description">Event Description:</label>
-    <textarea id="description" name="description"></textarea><br><br>
-    <input type="submit" value="Add Event">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+
+    <label for="eventDate">Date:</label>
+    <input type="date" id="eventDate" name="eventDate" required>
+
+    <label for="clubId">Club ID:</label>
+    <input type="number" id="clubId" name="clubId" required>
+
+    <input type="submit" value="Create Event">
 </form>
-<a href="displayEvents">View Events</a>
 </body>
 </html>
-

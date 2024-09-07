@@ -33,7 +33,7 @@ public class AddClubServlet extends HttpServlet {
             // Handle exception, maybe redirect to an error page
         }
 
-        response.sendRedirect("listClubs"); // Assuming this is a page that lists clubs
+        response.sendRedirect("listClubs");
     }
 
     @Override
