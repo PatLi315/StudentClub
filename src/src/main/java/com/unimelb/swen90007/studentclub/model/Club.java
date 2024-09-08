@@ -1,5 +1,9 @@
 package com.unimelb.swen90007.studentclub.model;
 
+/**
+ * Author: Zeqian Li
+ */
+
 public class Club {
     private int id;
     private String name;
