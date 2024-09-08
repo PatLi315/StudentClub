@@ -12,6 +12,9 @@ out/
 *.iws
 *.iml
 *.ipr
+.idea/
+.mvn/
+mvnw
 
 ### Eclipse ###
 .apt_generated
