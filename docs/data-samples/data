@@ -1,0 +1,52 @@
+-- Create the clubs table
+CREATE TABLE clubs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Create the events table
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date DATE NOT NULL,
+    club_id INT REFERENCES clubs(id) ON DELETE CASCADE
+);
+
+-- Create the rsvps table
+CREATE TABLE rsvps (
+    student_id INT NOT NULL,
+    event_id INT NOT NULL,
+    PRIMARY KEY (student_id, event_id),
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);
+
+-- Create the admins table
+CREATE TABLE admins (
+    id SERIAL PRIMARY KEY,
+    student_id INT NOT NULL,
+    club_id INT REFERENCES clubs(id) ON DELETE CASCADE
+);
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Insert sample data into clubs
+INSERT INTO clubs (name) VALUES ('Tech Club'), ('Art Club'), ('Science Club');
+
+-- Insert sample data into events
+INSERT INTO events (title, description, event_date, club_id) 
+VALUES 
+('Tech Talk', 'A talk about the latest in tech.', '2024-09-01', 1),
+('Art Exhibition', 'An exhibition of student art.', '2024-09-10', 2),
+('Science Fair', 'Showcasing student science projects.', '2024-09-20', 3);
+
+-- Insert sample data into rsvps
+INSERT INTO rsvps (student_id, event_id) VALUES (1, 1), (2, 2), (3, 3);
+
+-- Insert sample data into admins
+INSERT INTO admins (student_id, club_id) VALUES (1, 1), (2, 2), (3, 3);
