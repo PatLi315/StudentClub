@@ -31,7 +31,7 @@ public class StudentDAO {
     public Student getStudentById(int id) throws SQLException {
         Student student = null;
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STUDENT_BY_ID)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STUDENT_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -65,7 +65,7 @@ public class StudentDAO {
     // Update a student
     public void updateStudent(Student student) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENT_SQL)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENT_SQL)) {
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getEmail());
             preparedStatement.setString(3, student.getPassword());
