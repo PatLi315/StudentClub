@@ -1,9 +1,13 @@
 package com.unimelb.swen90007.studentclub.dao;
 
 import com.unimelb.swen90007.studentclub.model.Event;
-import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
+import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +18,27 @@ public class EventDAO {
     private static final String DELETE_EVENT_SQL = "DELETE FROM events WHERE id = ?";
     private static final String UPDATE_EVENT_SQL = "UPDATE events SET title = ?, description = ?, event_date = ? WHERE id = ?";
 
-    public void addEvent(Event event) throws SQLException {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_SQL)) {
-            preparedStatement.setString(1, event.getTitle());
-            preparedStatement.setString(2, event.getDescription());
-            preparedStatement.setDate(3, event.getEventDate());
-            preparedStatement.setInt(4, event.getClubId());
-            preparedStatement.executeUpdate();
-        }
+    // Register the operation to add an event in the UnitOfWork
+    public void addEvent(Event event, UnitOfWork unitOfWork) {
+        Connection connection = unitOfWork.getConnection();
+        unitOfWork.registerOperation(() -> {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_SQL)) {
+                preparedStatement.setString(1, event.getTitle());
+                preparedStatement.setString(2, event.getDescription());
+                preparedStatement.setDate(3, event.getEventDate());
+                preparedStatement.setInt(4, event.getClubId());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    public List<Event> listAllEvents() throws SQLException {
+    // Retrieve all events (this method doesn't modify data so no UnitOfWork needed)
+    public List<Event> listAllEvents(UnitOfWork unitOfWork) throws SQLException {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EVENTS_SQL)) {
+        Connection connection = unitOfWork.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EVENTS_SQL)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -42,30 +52,41 @@ public class EventDAO {
         return events;
     }
 
-    public void deleteEvent(int eventId) throws SQLException {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT_SQL)) {
-            preparedStatement.setInt(1, eventId);
-            preparedStatement.executeUpdate();
-        }
+    // Register the operation to delete an event in the UnitOfWork
+    public void deleteEvent(int eventId, UnitOfWork unitOfWork) {
+        Connection connection = unitOfWork.getConnection();
+        unitOfWork.registerOperation(() -> {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT_SQL)) {
+                preparedStatement.setInt(1, eventId);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    public void updateEvent(Event event) throws SQLException {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EVENT_SQL)) {
-            preparedStatement.setString(1, event.getTitle());
-            preparedStatement.setString(2, event.getDescription());
-            preparedStatement.setDate(3, event.getEventDate());
-            preparedStatement.setInt(4, event.getId());
-            preparedStatement.executeUpdate();
-        }
+    // Register the operation to update an event in the UnitOfWork
+    public void updateEvent(Event event, UnitOfWork unitOfWork) {
+        Connection connection = unitOfWork.getConnection();
+        unitOfWork.registerOperation(() -> {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EVENT_SQL)) {
+                preparedStatement.setString(1, event.getTitle());
+                preparedStatement.setString(2, event.getDescription());
+                preparedStatement.setDate(3, event.getEventDate());
+                preparedStatement.setInt(4, event.getId());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    public List<Event> searchUpcomingEvents(String searchQuery) throws SQLException {
+    // Retrieve upcoming events matching a search query (no modification so no UnitOfWork needed)
+    public List<Event> searchUpcomingEvents(String searchQuery, UnitOfWork unitOfWork) throws SQLException {
         List<Event> events = new ArrayList<>();
         String query = "SELECT * FROM events WHERE title ILIKE ? OR event_date >= CURRENT_DATE";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        Connection connection = unitOfWork.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, "%" + searchQuery + "%");
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {

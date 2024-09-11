@@ -1,40 +1,44 @@
 package com.unimelb.swen90007.studentclub.dao;
 
 import com.unimelb.swen90007.studentclub.model.Student;
-import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
+import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
 
     private static final String INSERT_STUDENT_SQL = "INSERT INTO students (name, email, password) VALUES (?, ?, ?)";
-    private static final String SELECT_STUDENT_BY_ID = "SELECT * FROM students WHERE id = ?";
-    private static final String SELECT_ALL_STUDENTS = "SELECT * FROM students";
-    private static final String UPDATE_STUDENT_SQL = "UPDATE students SET name = ?, email = ?, password = ? WHERE id = ?";
-    private static final String DELETE_STUDENT_SQL = "DELETE FROM students WHERE id = ?";
+    private static final String SELECT_STUDENT_BY_ID_SQL = "SELECT * FROM students WHERE id = ?";
+    private static final String SELECT_ALL_STUDENTS_SQL = "SELECT * FROM students";
     private static final String AUTHENTICATE_STUDENT_SQL = "SELECT * FROM students WHERE email = ? AND password = ?";
 
-    // Add a new student to the database
-    public void addStudent(Student student) throws SQLException {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STUDENT_SQL)) {
-            preparedStatement.setString(1, student.getName());
-            preparedStatement.setString(2, student.getEmail());
-            preparedStatement.setString(3, student.getPassword());
-            preparedStatement.executeUpdate();
-        }
+    // Register the operation to add a student
+    public void addStudent(Student student, UnitOfWork unitOfWork) {
+        Connection connection = unitOfWork.getConnection();
+        unitOfWork.registerOperation(() -> {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STUDENT_SQL)) {
+                preparedStatement.setString(1, student.getName());
+                preparedStatement.setString(2, student.getEmail());
+                preparedStatement.setString(3, student.getPassword());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     // Retrieve a student by ID
-    public Student getStudentById(int id) throws SQLException {
+    public Student getStudentById(int id, UnitOfWork unitOfWork) throws SQLException {
+        Connection connection = unitOfWork.getConnection();
         Student student = null;
-        try (Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STUDENT_BY_ID)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STUDENT_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
-
             if (rs.next()) {
                 String name = rs.getString("name");
                 String email = rs.getString("email");
@@ -45,11 +49,28 @@ public class StudentDAO {
         return student;
     }
 
-    // Retrieve all students
-    public List<Student> listAllStudents() throws SQLException {
+    // Authenticate a student
+    public Student authenticateStudent(String email, String password, UnitOfWork unitOfWork) throws SQLException {
+        Connection connection = unitOfWork.getConnection();
+        Student student = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(AUTHENTICATE_STUDENT_SQL)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                student = new Student(id, name, email, password);
+            }
+        }
+        return student;
+    }
+
+    // List all students
+    public List<Student> listAllStudents(UnitOfWork unitOfWork) throws SQLException {
         List<Student> students = new ArrayList<>();
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_STUDENTS)) {
+        Connection connection = unitOfWork.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_STUDENTS_SQL)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -60,43 +81,5 @@ public class StudentDAO {
             }
         }
         return students;
-    }
-
-    // Update a student
-    public void updateStudent(Student student) throws SQLException {
-        try (Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENT_SQL)) {
-            preparedStatement.setString(1, student.getName());
-            preparedStatement.setString(2, student.getEmail());
-            preparedStatement.setString(3, student.getPassword());
-            preparedStatement.setInt(4, student.getId());
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    // Delete a student by ID
-    public void deleteStudent(int id) throws SQLException {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_STUDENT_SQL)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    public Student authenticateStudent(String email, String password) throws SQLException {
-        Student student = null;
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(AUTHENTICATE_STUDENT_SQL)) {
-            preparedStatement.setString(1, email);
-            preparedStatement.setString(2, password);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                student = new Student(id, name, email, password);
-            }
-        }
-        return student;  // Return null if authentication fails
     }
 }
