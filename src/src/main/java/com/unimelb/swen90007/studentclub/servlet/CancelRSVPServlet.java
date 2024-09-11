@@ -1,15 +1,20 @@
 package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.RSVPDAO;
-import com.unimelb.swen90007.studentclub.model.RSVP;
+import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
+import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 
 public class CancelRSVPServlet extends HttpServlet {
 
@@ -24,32 +29,31 @@ public class CancelRSVPServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);  // Do not create a session
+        HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("student") == null) {
             // User not logged in, redirect to login page
             response.sendRedirect("login.jsp");
             return;
         }
 
-        int studentId = Integer.parseInt(request.getParameter("studentId"));
+        // Get the logged-in student
+        Student loggedInStudent = (Student) session.getAttribute("student");
         int eventId = Integer.parseInt(request.getParameter("eventId"));
 
-        RSVP rsvp = new RSVP(studentId, eventId);
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            UnitOfWork unitOfWork = new UnitOfWork(connection);
 
-        try {
-            rsvpDAO.removeRSVP(rsvp);
-        } catch (Exception e) {
+            // Register the operation to cancel the RSVP in the UnitOfWork
+            rsvpDAO.cancelRSVP(loggedInStudent.getId(), eventId, unitOfWork);
+
+            // Commit the UnitOfWork to execute the operation
+            unitOfWork.commit();
+
+            response.sendRedirect("listEvents.jsp");
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            // Handle exception, maybe redirect to an error page
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while canceling the RSVP.");
         }
-
-        // Redirect to a confirmation page or the list of events
-        response.sendRedirect("displayEvents"); // Assuming you redirect to a page that lists events
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher("cancelRSVP.jsp").forward(request, response);
     }
 }
