@@ -1,6 +1,7 @@
 package com.unimelb.swen90007.studentclub.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Event {
     private int id;
@@ -8,18 +9,28 @@ public class Event {
     private String description;
     private Date eventDate;
     private int clubId;
+    private Timestamp createdAt;  // Timestamp for when the event was created
 
     // Constructor with all fields
-    public Event(int id, String title, String description, Date eventDate, int clubId) {
+    public Event(int id, String title, String description, Date eventDate, int clubId, Timestamp createdAt) {
         this.id = id;
+        this.title = title;
+        this.description = description;
+        this.eventDate = eventDate;
+        this.clubId = clubId;
+        this.createdAt = createdAt;
+    }
+
+    // Constructor without ID (for inserting new events)
+    public Event(String title, String description, Date eventDate, int clubId) {
         this.title = title;
         this.description = description;
         this.eventDate = eventDate;
         this.clubId = clubId;
     }
 
-    // Constructor without ID (for inserting new events)
-    public Event(String title, String description, Date eventDate, int clubId) {
+    public Event(int id, String title, String description, Date eventDate, int clubId) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.eventDate = eventDate;
@@ -65,5 +76,13 @@ public class Event {
 
     public void setClubId(int clubId) {
         this.clubId = clubId;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }

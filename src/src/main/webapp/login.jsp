@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Login</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
         }
+        h2 {
+            color: #333;
+        }
         form {
-            margin: 0 auto;
-            width: 300px;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0px 0px 10px 0px #ccc;
+            margin-top: 20px;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
         }
         input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            box-sizing: border-box;
+            padding: 8px;
+            width: 300px;
         }
         input[type="submit"] {
-            padding: 10px;
+            padding: 8px 16px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            width: 100%;
             cursor: pointer;
         }
         input[type="submit"]:hover {
@@ -36,7 +35,7 @@
     </style>
 </head>
 <body>
-<h2>Student Login</h2>
+<h2>Login</h2>
 <form action="login" method="post">
     <label for="email">Email:</label>
     <input type="text" id="email" name="email" required>
@@ -46,5 +45,9 @@
 
     <input type="submit" value="Login">
 </form>
+
+<% if (request.getAttribute("error") != null) { %>
+<p style="color:red;"><%= request.getAttribute("error") %></p>
+<% } %>
 </body>
 </html>

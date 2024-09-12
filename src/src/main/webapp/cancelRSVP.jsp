@@ -1,3 +1,9 @@
+<%@ page session="true" %>
+<%
+    if (session.getAttribute("student") == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,22 +30,19 @@
         }
         input[type="submit"] {
             padding: 8px 16px;
-            background-color: #007bff;
+            background-color: #dc3545;
             color: #fff;
             border: none;
             cursor: pointer;
         }
         input[type="submit"]:hover {
-            background-color: #d9534f;
+            background-color: #c82333;
         }
     </style>
 </head>
 <body>
-<h2>Cancel Your RSVP</h2>
+<h2>Cancel RSVP</h2>
 <form action="cancelRSVP" method="post">
-    <label for="studentId">Student ID:</label>
-    <input type="number" id="studentId" name="studentId" required>
-
     <label for="eventId">Event ID:</label>
     <input type="number" id="eventId" name="eventId" required>
 

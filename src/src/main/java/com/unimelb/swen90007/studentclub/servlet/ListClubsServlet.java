@@ -36,7 +36,7 @@ public class ListClubsServlet extends HttpServlet {
 
             // Set clubs in request attribute and forward to JSP
             request.setAttribute("clubs", clubs);
-            request.getRequestDispatcher("clubs.jsp").forward(request, response);
+            request.getRequestDispatcher("listClubs.jsp").forward(request, response);
 
         } catch (SQLException e) {
             e.printStackTrace();

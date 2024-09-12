@@ -67,7 +67,7 @@ public class ModifyEventServlet extends HttpServlet {
             // Commit the UnitOfWork to execute the operation
             unitOfWork.commit();
 
-            response.sendRedirect("listEvents.jsp");
+            response.sendRedirect("displayEvents.jsp");
 
         } catch (SQLException e) {
             e.printStackTrace();

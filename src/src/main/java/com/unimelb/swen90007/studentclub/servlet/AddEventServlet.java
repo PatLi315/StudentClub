@@ -43,12 +43,12 @@ public class AddEventServlet extends HttpServlet {
 
         // Get the logged-in student
         Student loggedInStudent = (Student) session.getAttribute("student");
-        int clubId = (int) session.getAttribute("clubId"); // Assuming clubId is stored in session
-
+        //int clubId = (int) session.getAttribute("clubId");
         // Extract event details
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         Date eventDate = Date.valueOf(request.getParameter("eventDate"));
+        int clubId = Integer.parseInt(request.getParameter("clubId"));
 
         // Check if the logged-in student is an admin of the club
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -67,7 +67,7 @@ public class AddEventServlet extends HttpServlet {
             // Commit the UnitOfWork to execute the operation
             unitOfWork.commit();
 
-            response.sendRedirect("listEvents.jsp");
+            response.sendRedirect("displayEvents.jsp");
 
         } catch (SQLException e) {
             e.printStackTrace();

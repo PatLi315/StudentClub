@@ -60,7 +60,7 @@ public class AddAdminServlet extends HttpServlet {
             unitOfWork.commit();
 
             // Redirect to the admin dashboard after successful addition
-            response.sendRedirect("adminDashboard.jsp");
+            response.sendRedirect("index.jsp");
 
         } catch (SQLException e) {
             e.printStackTrace();

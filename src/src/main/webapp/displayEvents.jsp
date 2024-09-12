@@ -1,10 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
 <%@ page import="com.unimelb.swen90007.studentclub.model.Event" %>
+<%@ page import="java.util.List" %>
+<%@ page session="true" %>
+<%
+    if (session.getAttribute("student") == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Event List</title>
+    <title>Events List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,50 +19,52 @@
         h2 {
             color: #333;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        li {
-            margin-bottom: 20px;
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
             padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-        }
-        strong {
-            display: block;
-            margin-bottom: 5px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-<form method="get" action="displayEvents">
-    <label for="search">Search for upcoming events:</label>
-    <input type="text" name="search" id="search" placeholder="Event title or date">
-    <input type="submit" value="Search">
-</form>
-<h2>Event List</h2>
-<ul>
+<h2>All Events</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Club</th>
+    </tr>
+    </thead>
+    <tbody>
     <%
         List<Event> events = (List<Event>) request.getAttribute("events");
         if (events != null) {
             for (Event event : events) {
     %>
-    <li>
-        <strong>Title:</strong> <%= event.getTitle() %>
-        <strong>Description:</strong> <%= event.getDescription() %>
-        <strong>Date:</strong> <%= event.getEventDate() %>
-    </li>
+    <tr>
+        <td><%= event.getTitle() %></td>
+        <td><%= event.getDescription() %></td>
+        <td><%= event.getEventDate() %></td>
+        <td><%= event.getClubId() %></td>
+    </tr>
     <%
         }
     } else {
     %>
-    <li>No events found.</li>
-    <%
-        }
-    %>
-</ul>
-
-
+    <tr>
+        <td colspan="4">No events available</td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
 </body>
 </html>

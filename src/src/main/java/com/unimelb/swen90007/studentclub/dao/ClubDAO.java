@@ -49,9 +49,9 @@ public class ClubDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CLUBS_SQL)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
+                //int id = rs.getInt("id");
                 String name = rs.getString("name");
-                clubs.add(new Club(id, name));
+                clubs.add(new Club(name));
             }
         }
         return clubs;

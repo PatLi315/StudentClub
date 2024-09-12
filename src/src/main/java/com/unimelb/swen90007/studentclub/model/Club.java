@@ -1,17 +1,17 @@
 package com.unimelb.swen90007.studentclub.model;
 
-/**
- * Author: Zeqian Li
- */
+import java.sql.Timestamp;
 
 public class Club {
     private int id;
     private String name;
+    private Timestamp createdAt;  // Timestamp for when the club was created
 
-    // Constructor
-    public Club(int id, String name) {
+    // Constructor with all fields
+    public Club(int id, String name, Timestamp createdAt) {
         this.id = id;
         this.name = name;
+        this.createdAt = createdAt;
     }
 
     // Constructor without ID (for inserting new clubs)
@@ -34,5 +34,13 @@ public class Club {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }

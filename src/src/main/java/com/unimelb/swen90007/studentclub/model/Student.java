@@ -4,18 +4,28 @@ public class Student {
     private int id;
     private String name;
     private String email;
-    private String password;  // This should be hashed in real-world applications
+    private String password;
+    private String role;
 
     // Constructor with all fields
-    public Student(int id, String name, String email, String password) {
+    public Student(int id, String name, String email, String password, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
-    // Constructor without id (useful when creating a new student)
-    public Student(String name, String email, String password) {
+    // Constructor without ID (for inserting new students)
+    public Student(String name, String email, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public Student(int id, String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -54,13 +64,21 @@ public class Student {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

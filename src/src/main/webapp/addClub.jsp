@@ -1,3 +1,9 @@
+<%@ page session="true" %>
+<%
+    if (session.getAttribute("student") == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,11 +41,12 @@
     </style>
 </head>
 <body>
-<h2>Add a New Club</h2>
+<h2>Add New Club</h2>
 <form action="addClub" method="post">
-    <label for="name">Club Name:</label>
-    <input type="text" id="name" name="name" required>
-    <input type="submit" value="Create Club">
+    <label for="clubName">Club Name:</label>
+    <input type="text" id="clubName" name="clubName" required>
+
+    <input type="submit" value="Add Club">
 </form>
 </body>
 </html>

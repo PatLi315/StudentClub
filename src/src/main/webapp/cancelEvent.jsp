@@ -1,7 +1,13 @@
+<%@ page session="true" %>
+<%
+    if (session.getAttribute("student") == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cancel Event</title>
+    <title>Cancel RSVP</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,22 +30,23 @@
         }
         input[type="submit"] {
             padding: 8px 16px;
-            background-color: #d9534f;
+            background-color: #dc3545;
             color: #fff;
             border: none;
             cursor: pointer;
         }
         input[type="submit"]:hover {
-            background-color: #c9302c;
+            background-color: #c82333;
         }
     </style>
 </head>
 <body>
-<h2>Cancel an Event</h2>
-<form action="cancelEvent" method="post">
-    <label for="id">Event ID:</label>
-    <input type="number" id="id" name="id" required>
-    <input type="submit" value="Cancel Event">
+<h2>Cancel RSVP</h2>
+<form action="cancelRSVP" method="post">
+    <label for="eventId">Event ID:</label>
+    <input type="number" id="eventId" name="eventId" required>
+
+    <input type="submit" value="Cancel RSVP">
 </form>
 </body>
 </html>

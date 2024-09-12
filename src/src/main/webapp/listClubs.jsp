@@ -1,6 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
 <%@ page import="com.unimelb.swen90007.studentclub.model.Club" %>
+<%@ page import="java.util.List" %>
+<%@ page session="true" %>
+<%
+  if (session.getAttribute("student") == null) {
+    response.sendRedirect("login.jsp");
+  }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,42 +19,48 @@
     h2 {
       color: #333;
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
-    li {
-      margin-bottom: 20px;
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
       padding: 10px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-    }
-    strong {
-      display: block;
-      margin-bottom: 5px;
+      text-align: left;
     }
   </style>
 </head>
 <body>
-<h2>Club List</h2>
-<ul>
+<h2>All Clubs</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Club ID</th>
+    <th>Club Name</th>
+  </tr>
+  </thead>
+  <tbody>
   <%
     List<Club> clubs = (List<Club>) request.getAttribute("clubs");
     if (clubs != null) {
       for (Club club : clubs) {
   %>
-  <li>
-    <strong>ID:</strong> <%= club.getId() %><br>
-    <strong>Name:</strong> <%= club.getName() %>
-  </li>
+  <tr>
+    <td><%= club.getId() %></td>
+    <td><%= club.getName() %></td>
+  </tr>
   <%
     }
   } else {
   %>
-  <li>No clubs found.</li>
-  <%
-    }
-  %>
-</ul>
+  <tr>
+    <td colspan="2">No clubs available</td>
+  </tr>
+  <% } %>
+  </tbody>
+</table>
 </body>
 </html>

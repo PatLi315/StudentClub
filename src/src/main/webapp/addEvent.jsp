@@ -1,3 +1,9 @@
+<%@ page session="true" %>
+<%
+    if (session.getAttribute("student") == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,3 +1,9 @@
+<%@ page session="true" %>
+<%
+    if (session.getAttribute("student") == null) {
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,10 +28,6 @@
             padding: 8px;
             width: 300px;
         }
-        input[type="number"] {
-            padding: 8px;
-            width: 100px;
-        }
         input[type="submit"] {
             padding: 8px 16px;
             background-color: #007bff;
@@ -39,10 +41,10 @@
     </style>
 </head>
 <body>
-<h2>Modify an Event</h2>
+<h2>Modify Event</h2>
 <form action="modifyEvent" method="post">
-    <label for="id">Event ID:</label>
-    <input type="number" id="id" name="id" required>
+    <label for="eventId">Event ID:</label>
+    <input type="number" id="eventId" name="eventId" required>
 
     <label for="title">New Title:</label>
     <input type="text" id="title" name="title" required>
@@ -52,9 +54,6 @@
 
     <label for="eventDate">New Date:</label>
     <input type="date" id="eventDate" name="eventDate" required>
-
-    <label for="clubId">New Club ID:</label>
-    <input type="number" id="clubId" name="clubId" required>
 
     <input type="submit" value="Modify Event">
 </form>
