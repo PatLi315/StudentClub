@@ -41,20 +41,29 @@ public class AddClubServlet extends HttpServlet {
 
         // Get the logged-in student
         Student loggedInStudent = (Student) session.getAttribute("student");
-        String clubName = request.getParameter("name");
+        String clubName = request.getParameter("clubName");
+
+        if (clubName == null || clubName.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Club name cannot be empty");
+            return;
+        }
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            UnitOfWork unitOfWork = new UnitOfWork(connection);
+            UnitOfWork unitOfWork = new UnitOfWork(connection);  // Pass the connection to UnitOfWork
 
             // Create the club
             Club club = new Club(clubName);
             clubDAO.addClub(club, unitOfWork);
 
-            // Retrieve the newly created club ID
-            int clubId = clubDAO.getLastInsertedClubId(unitOfWork);
+            // Retrieve the newly created club ID (Ensure this method works properly in your DAO)
+            //int clubId = clubDAO.getLastInsertedClubId(unitOfWork);
 
+            if (club.getId() == 0) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve club ID.");
+                return;
+            }
             // Register the logged-in student as an admin of the new club
-            adminDAO.addAdmin(loggedInStudent.getId(), clubId, unitOfWork);
+            adminDAO.addAdmin(loggedInStudent.getId(), club.getId(), unitOfWork);
 
             // Commit the UnitOfWork to execute all operations
             unitOfWork.commit();
@@ -63,7 +72,8 @@ public class AddClubServlet extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while creating the club.");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while adding the club");
         }
     }
 }
+

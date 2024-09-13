@@ -3,17 +3,13 @@ package com.unimelb.swen90007.studentclub.dao;
 import com.unimelb.swen90007.studentclub.model.Event;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventDAO {
 
-    private static final String INSERT_EVENT_SQL = "INSERT INTO events (title, description, event_date, club_id) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_EVENT_SQL = "INSERT INTO events (title, description, capacity, venue, event_date, club_id, cost) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_EVENTS_SQL = "SELECT * FROM events";
     private static final String DELETE_EVENT_SQL = "DELETE FROM events WHERE id = ?";
     private static final String UPDATE_EVENT_SQL = "UPDATE events SET title = ?, description = ?, event_date = ? WHERE id = ?";
@@ -25,8 +21,12 @@ public class EventDAO {
             try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_SQL)) {
                 preparedStatement.setString(1, event.getTitle());
                 preparedStatement.setString(2, event.getDescription());
-                preparedStatement.setDate(3, event.getEventDate());
-                preparedStatement.setInt(4, event.getClubId());
+                preparedStatement.setInt(3, event.getCapacity());
+                preparedStatement.setString(4, event.getVenue());
+                preparedStatement.setDate(5, event.getEventDate());
+                preparedStatement.setInt(6, event.getClubId());
+                preparedStatement.setInt(7, event.getCost());
+
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
