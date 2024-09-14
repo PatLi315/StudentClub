@@ -1,3 +1,5 @@
+<%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +63,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="login-form">
     <h1>Login</h1>
     <form action="login" method="post">
         <label for="username">Username</label>

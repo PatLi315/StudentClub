@@ -1,5 +1,7 @@
 package com.unimelb.swen90007.studentclub.servlet;
 
+import com.unimelb.swen90007.studentclub.auth.CustomLoginConfig;
+import com.unimelb.swen90007.studentclub.auth.StudentCallbackHandler;
 import com.unimelb.swen90007.studentclub.dao.StudentDAO;
 
 import jakarta.servlet.ServletException;
@@ -8,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -21,27 +25,22 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        CustomLoginConfig.setCustomConfiguration();
+
         try {
-            boolean isValidLogin = studentDAO.validateLogin(username, password);
+            LoginContext loginContext = new LoginContext("studentClub", new StudentCallbackHandler(username, password));
+            loginContext.login();
 
-            if (isValidLogin) {
-                HttpSession session = request.getSession();
-                session.setAttribute("username", username); // Save just the username in session
-                response.sendRedirect("index.jsp"); // Redirect to the home page
-            } else {
-                request.setAttribute("errorMessage", "Invalid username or password");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred during login.");
+            HttpSession session = request.getSession();
+            session.setAttribute("student", username);
+            response.sendRedirect("index.jsp");
+        } catch (LoginException e) {
+            request.setAttribute("errorMessage", "Login failed: " + e.getMessage());
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 }

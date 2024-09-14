@@ -6,7 +6,6 @@ import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class EventDAO {
 
@@ -60,7 +59,7 @@ public class EventDAO {
     // Get event by ID using UnitOfWork
     public Event getEventById(int eventId, UnitOfWork unitOfWork) throws SQLException {
         Connection connection = unitOfWork.getConnection();
-        AtomicReference<Event> event = null;
+        final Event[] eventHolder = new Event[1];
 
         unitOfWork.registerOperation(() -> {
             try (PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID_SQL)) {
@@ -75,13 +74,13 @@ public class EventDAO {
                     int capacity = rs.getInt("capacity");
                     String venue = rs.getString("venue");
 
-                    event.set(new Event(eventId, title, description, eventDate, clubId, capacity, venue));
+                    eventHolder[0] = new Event(eventId, title, description, eventDate, clubId, capacity, venue);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
-        return event.get();
+        return eventHolder[0];
     }
 
     // Update an event using UnitOfWork

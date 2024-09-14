@@ -23,6 +23,20 @@ public class Student {
         this.role = role;
     }
 
+    public Student(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = "student";
+    }
+
+    public Student(int studentId, String name, String email, String role) {
+        this.id = studentId;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
+
     // Getters and Setters
     public int getId() { return id; }
 
