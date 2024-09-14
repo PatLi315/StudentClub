@@ -1,52 +1,69 @@
-<%@ page session="true" %>
-<%
-    if (session.getAttribute("student") == null) {
-        response.sendRedirect("login.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Cancel RSVP</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
-        h2 {
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
             color: #333;
         }
+
         form {
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
         }
-        label, input {
-            display: block;
-            margin-bottom: 10px;
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
         }
-        input[type="number"] {
-            padding: 8px;
-            width: 100px;
+
+        select, input[type="submit"] {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
+
         input[type="submit"] {
-            padding: 8px 16px;
-            background-color: #dc3545;
-            color: #fff;
+            margin-top: 20px;
+            background-color: #ff6347;
+            color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
-            background-color: #c82333;
+            background-color: #e55347;
         }
     </style>
 </head>
 <body>
-<h2>Cancel RSVP</h2>
-<form action="cancelRSVP" method="post">
-    <label for="eventId">Event ID:</label>
-    <input type="number" id="eventId" name="eventId" required>
+<div class="container">
+    <h1>Cancel RSVP</h1>
+    <form action="cancelRSVP" method="post">
+        <label for="rsvpId">Select RSVP to Cancel</label>
+        <select id="rsvpId" name="rsvpId">
+            <c:forEach var="rsvp" items="${rsvps}">
+                <option value="${rsvp.id}">${rsvp.eventTitle} - ${rsvp.numTickets} tickets</option>
+            </c:forEach>
+        </select>
 
-    <input type="submit" value="Cancel RSVP">
-</form>
+        <input type="submit" value="Cancel RSVP">
+    </form>
+</div>
 </body>
 </html>

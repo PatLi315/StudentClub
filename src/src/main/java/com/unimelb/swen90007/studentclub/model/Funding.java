@@ -3,56 +3,44 @@ package com.unimelb.swen90007.studentclub.model;
 public class Funding {
 
     private int id;
-    private String description;
-    private Integer amountRequested;
-    private String status;  // Draft, Submitted, In Review, Approved, Rejected
     private int clubId;
+    private String description;
+    private int amount;
+    private String status;
 
-    public Funding(int id, String description, Integer amountRequested, String status, int clubId) {
+    public Funding(int id, int clubId, String description, int amount, String status) {
         this.id = id;
-        this.description = description;
-        this.amountRequested = amountRequested;
-        this.status = status;
         this.clubId = clubId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Integer getAmountRequested() {
-        return amountRequested;
-    }
-
-    public void setAmountRequested(Integer amountRequested) {
-        this.amountRequested = amountRequested;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+        this.amount = amount;
         this.status = status;
     }
 
-    public int getClubId() {
-        return clubId;
-    }
-
-    public void setClubId(int clubId) {
+    public Funding(int clubId, String description, int amount, String status) {
         this.clubId = clubId;
+        this.description = description;
+        this.amount = amount;
+        this.status = status;
     }
 
-    public int getId() {
-        return id;
-    }
+    // Getters and Setters
+    public int getId() { return id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
+
+    public int getClubId() { return clubId; }
+
+    public void setClubId(int clubId) { this.clubId = clubId; }
+
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public int getAmount() { return amount; }
+
+    public void setAmount(int amount) { this.amount = amount; }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 }

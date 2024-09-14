@@ -1,53 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
-        h2 {
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
             color: #333;
         }
+
         form {
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
         }
-        label, input {
-            display: block;
-            margin-bottom: 10px;
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
         }
+
         input[type="text"], input[type="password"] {
-            padding: 8px;
-            width: 300px;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
+
         input[type="submit"] {
-            padding: 8px 16px;
+            margin-top: 20px;
+            padding: 10px;
             background-color: #007bff;
-            color: #fff;
+            color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
             background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<h2>Login</h2>
-<form action="login" method="post">
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email" required>
+<div class="container">
+    <h1>Login</h1>
+    <form action="login" method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
 
-    <input type="submit" value="Login">
-</form>
+        <input type="submit" value="Login">
+    </form>
 
-<% if (request.getAttribute("error") != null) { %>
-<p style="color:red;"><%= request.getAttribute("error") %></p>
-<% } %>
+    <c:if test="${not empty errorMessage}">
+        <p class="error-message">${errorMessage}</p>
+    </c:if>
+</div>
 </body>
 </html>

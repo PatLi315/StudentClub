@@ -1,47 +1,39 @@
 package com.unimelb.swen90007.studentclub.model;
 
-import java.sql.Timestamp;
-
 public class RSVP {
+
+    private int id;
     private int studentId;
     private int eventId;
-    private Timestamp createdAt;  // Timestamp for when the RSVP was created
+    private int tickets;
 
-    // Constructor with all fields
-    public RSVP(int studentId, int eventId, Timestamp createdAt) {
+    public RSVP(int studentId, int eventId, int tickets) {
         this.studentId = studentId;
         this.eventId = eventId;
-        this.createdAt = createdAt;
+        this.tickets = tickets;
     }
 
-    // Constructor without createdAt (for new RSVPs)
-    public RSVP(int studentId, int eventId) {
+    public RSVP(int id, int studentId, int eventId, int tickets) {
+        this.id = id;
         this.studentId = studentId;
         this.eventId = eventId;
+        this.tickets = tickets;
     }
 
     // Getters and Setters
-    public int getStudentId() {
-        return studentId;
-    }
+    public int getId() { return id; }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
+    public void setId(int id) { this.id = id; }
 
-    public int getEventId() {
-        return eventId;
-    }
+    public int getStudentId() { return studentId; }
 
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
-    }
+    public void setStudentId(int studentId) { this.studentId = studentId; }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
+    public int getEventId() { return eventId; }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+    public void setEventId(int eventId) { this.eventId = eventId; }
+
+    public int getTickets() { return tickets; }
+
+    public void setTickets(int tickets) { this.tickets = tickets; }
 }

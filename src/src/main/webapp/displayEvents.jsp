@@ -1,70 +1,85 @@
-<%@ page import="com.unimelb.swen90007.studentclub.model.Event" %>
-<%@ page import="java.util.List" %>
-<%@ page session="true" %>
-<%
-    if (session.getAttribute("student") == null) {
-        response.sendRedirect("login.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Events List</title>
+    <meta charset="UTF-8">
+    <title>Upcoming Events</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
-        h2 {
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
             color: #333;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+
+        .event-list {
+            list-style: none;
+            padding: 0;
         }
-        table, th, td {
-            border: 1px solid #ccc;
+
+        .event-item {
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
         }
-        th, td {
-            padding: 10px;
-            text-align: left;
+
+        .event-item:hover {
+            background-color: #218838;
+        }
+
+        .event-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .event-item a:hover {
+            text-decoration: underline;
+        }
+
+        .event-date {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .rsvp-btn {
+            background-color: #ff6347;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .rsvp-btn:hover {
+            background-color: #e55347;
         }
     </style>
 </head>
 <body>
-<h2>All Events</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Club</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%
-        List<Event> events = (List<Event>) request.getAttribute("events");
-        if (events != null) {
-            for (Event event : events) {
-    %>
-    <tr>
-        <td><%= event.getTitle() %></td>
-        <td><%= event.getDescription() %></td>
-        <td><%= event.getEventDate() %></td>
-        <td><%= event.getClubId() %></td>
-    </tr>
-    <%
-        }
-    } else {
-    %>
-    <tr>
-        <td colspan="4">No events available</td>
-    </tr>
-    <% } %>
-    </tbody>
-</table>
+<div class="container">
+    <h1>Upcoming Events</h1>
+    <ul class="event-list">
+        <c:forEach var="event" items="${events}">
+            <li class="event-item">
+                <a href="eventDetails.jsp?eventId=${event.id}">${event.title}</a>
+                <p class="event-date">${event.eventDate}</p>
+                <p>${event.description}</p>
+                <a href="rsvpEvent.jsp?eventId=${event.id}" class="rsvp-btn">RSVP</a>
+            </li>
+        </c:forEach>
+    </ul>
+</div>
 </body>
 </html>

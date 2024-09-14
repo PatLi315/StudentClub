@@ -1,65 +1,78 @@
-<%@ page session="true" %>
-<%
-    if (session.getAttribute("student") == null) {
-        response.sendRedirect("login.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create New Event</title>
+    <meta charset="UTF-8">
+    <title>Create Event</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
-        h2 {
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
             color: #333;
         }
+
         form {
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
         }
-        label, input, textarea {
-            display: block;
-            margin-bottom: 10px;
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
         }
-        input[type="text"], input[type="date"], textarea {
-            padding: 8px;
-            width: 300px;
+
+        input[type="text"], input[type="datetime-local"], input[type="number"], textarea {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        input[type="number"] {
-            padding: 8px;
-            width: 100px;
-        }
+
         input[type="submit"] {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: #fff;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-<h2>Create a New Event</h2>
-<form action="addEvent" method="post">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required>
+<div class="container">
+    <h1>Create Event</h1>
+    <form action="addEvent" method="post">
+        <label for="title">Event Title</label>
+        <input type="text" id="title" name="title" required>
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required></textarea>
+        <label for="description">Event Description</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
 
-    <label for="eventDate">Date:</label>
-    <input type="date" id="eventDate" name="eventDate" required>
+        <label for="eventDate">Event Date</label>
+        <input type="datetime-local" id="eventDate" name="eventDate" required>
 
-    <label for="clubId">Club ID:</label>
-    <input type="number" id="clubId" name="clubId" required>
+        <label for="capacity">Capacity</label>
+        <input type="number" id="capacity" name="capacity" required>
 
-    <input type="submit" value="Create Event">
-</form>
+        <label for="venue">Venue</label>
+        <input type="text" id="venue" name="venue" required>
+
+        <input type="submit" value="Create Event">
+    </form>
+</div>
 </body>
 </html>

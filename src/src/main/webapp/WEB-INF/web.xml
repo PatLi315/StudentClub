@@ -42,16 +42,6 @@
         <url-pattern>/cancelRSVP</url-pattern>
     </servlet-mapping>
 
-    <!-- Add Club Servlet -->
-    <servlet>
-        <servlet-name>AddClubServlet</servlet-name>
-        <servlet-class>com.unimelb.swen90007.studentclub.servlet.AddClubServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddClubServlet</servlet-name>
-        <url-pattern>/addClub</url-pattern>
-    </servlet-mapping>
-
     <!-- List Clubs Servlet -->
     <servlet>
         <servlet-name>ListClubsServlet</servlet-name>

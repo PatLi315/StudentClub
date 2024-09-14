@@ -1,55 +1,69 @@
-<%@ page session="true" %>
-<%
-  if (session.getAttribute("student") == null) {
-    response.sendRedirect("login.jsp");
-  }
-%>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Remove Admin from Club</title>
+  <meta charset="UTF-8">
+  <title>Remove Admin</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
+      background-color: #f5f5f5;
     }
-    h2 {
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
       color: #333;
     }
+
     form {
-      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
     }
-    label, input {
-      display: block;
-      margin-bottom: 10px;
+
+    label {
+      margin-top: 10px;
+      font-weight: bold;
     }
-    input[type="number"] {
-      padding: 8px;
-      width: 100px;
+
+    select {
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
+
     input[type="submit"] {
-      padding: 8px 16px;
-      background-color: #d9534f;
-      color: #fff;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #ff6347;
+      color: white;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
+
     input[type="submit"]:hover {
-      background-color: #c9302c;
+      background-color: #e55347;
     }
   </style>
 </head>
 <body>
-<h2>Remove Admin from Club</h2>
-<form action="removeAdmin" method="post">
-  <label for="studentId">Student ID:</label>
-  <input type="number" id="studentId" name="studentId" required>
-
-  <label for="clubId">Club ID:</label>
-  <input type="number" id="clubId" name="clubId" required>
-
-  <input type="submit" value="Remove Admin">
-</form>
+<div class="container">
+  <h1>Remove Admin</h1>
+  <form action="removeAdmin" method="post">
+    <label for="adminId">Select Admin to Remove</label>
+    <select id="adminId" name="adminId">
+      <c:forEach var="admin" items="${admins}">
+        <option value="${admin.id}">${admin.name}</option>
+      </c:forEach>
+    </select>
+    <input type="submit" value="Remove Admin">
+  </form>
+</div>
 </body>
 </html>

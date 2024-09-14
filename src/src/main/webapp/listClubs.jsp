@@ -1,66 +1,63 @@
-<%@ page import="com.unimelb.swen90007.studentclub.model.Club" %>
-<%@ page import="java.util.List" %>
-<%@ page session="true" %>
-<%
-  if (session.getAttribute("student") == null) {
-    response.sendRedirect("login.jsp");
-  }
-%>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Club List</title>
+  <meta charset="UTF-8">
+  <title>All Clubs</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
+      background-color: #f5f5f5;
     }
-    h2 {
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
       color: #333;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+
+    .club-list {
+      list-style: none;
+      padding: 0;
     }
-    table, th, td {
-      border: 1px solid #ccc;
+
+    .club-item {
+      background-color: #007bff;
+      color: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 5px;
     }
-    th, td {
-      padding: 10px;
-      text-align: left;
+
+    .club-item:hover {
+      background-color: #0056b3;
+    }
+
+    .club-item a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .club-item a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-<h2>All Clubs</h2>
-<table>
-  <thead>
-  <tr>
-    <th>Club ID</th>
-    <th>Club Name</th>
-  </tr>
-  </thead>
-  <tbody>
-  <%
-    List<Club> clubs = (List<Club>) request.getAttribute("clubs");
-    if (clubs != null) {
-      for (Club club : clubs) {
-  %>
-  <tr>
-    <td><%= club.getId() %></td>
-    <td><%= club.getName() %></td>
-  </tr>
-  <%
-    }
-  } else {
-  %>
-  <tr>
-    <td colspan="2">No clubs available</td>
-  </tr>
-  <% } %>
-  </tbody>
-</table>
+<div class="container">
+  <h1>All Clubs</h1>
+  <ul class="club-list">
+    <c:forEach var="club" items="${clubs}">
+      <li class="club-item">
+        <a href="clubDetails.jsp?clubId=${club.id}">${club.name}</a>
+      </li>
+    </c:forEach>
+  </ul>
+</div>
 </body>
 </html>

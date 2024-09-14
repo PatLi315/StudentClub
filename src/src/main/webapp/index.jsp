@@ -1,53 +1,64 @@
-<%@ page session="true" %>
-<%
-    if (session.getAttribute("student") == null) {
-        response.sendRedirect("login.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Student Club Management System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
+            background-color: #f5f5f5;
+            margin: 0;
             padding: 0;
         }
-        li {
-            margin-bottom: 10px;
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
         }
-        a {
+
+        h1 {
+            color: #333;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        nav {
+            text-align: center;
+            background-color: #007bff;
+            padding: 10px 0;
+        }
+
+        nav a {
+            margin: 0 15px;
+            color: white;
             text-decoration: none;
-            color: #007bff;
             font-weight: bold;
         }
-        a:hover {
+
+        nav a:hover {
             text-decoration: underline;
+        }
+
+        .welcome-msg {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 18px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-<h1>Welcome to the Student Club Management System</h1>
-<p>Select an option below to manage clubs, events, and RSVPs:</p>
-<ul>
-    <li><a href="addClub.jsp">Add a New Club</a></li>
-    <li><a href="addEvent.jsp">Create a New Event</a></li>
-    <li><a href="displayEvents">View All Events</a></li>
-    <li><a href="rsvpEvent.jsp">RSVP to an Event</a></li>
-    <li><a href="cancelRSVP.jsp">Cancel an RSVP</a></li>
-    <li><a href="cancelEvent.jsp">Cancel an Event</a></li>
-    <li><a href="addAdmin.jsp">Add an Admin to a Club</a></li>
-    <li><a href="removeAdmin.jsp">Remove an Admin from a Club</a></li>
-    <li><a href="listClubs.jsp">View All Clubs</a></li>
-    <li><a href="logout">Logout</a></li>
-</ul>
+<nav>
+    <a href="listClubs.jsp">View Clubs</a>
+    <a href="displayEvents.jsp">View Events</a>
+    <a href="addEvent.jsp">Create Event</a> <!-- Added Add Event link here -->
+    <a href="login.jsp">Login</a>
+    <a href="logout">Logout</a>
+</nav>
+<div class="container">
+    <h1>Welcome to the Student Club Management System</h1>
+    <p class="welcome-msg">Manage student clubs and events effortlessly.</p>
+</div>
 </body>
 </html>
