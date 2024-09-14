@@ -1,7 +1,24 @@
+-- Create the students table
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL -- can be 'student', 'admin', or other roles
+);
+
 -- Create the clubs table
 CREATE TABLE clubs (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+-- Create the admins table (links students to clubs as admins)
+CREATE TABLE admins (
+    id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES students(id),
+    club_id INT REFERENCES clubs(id),
+    UNIQUE (student_id, club_id)
 );
 
 -- Create the events table
@@ -10,43 +27,72 @@ CREATE TABLE events (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     event_date DATE NOT NULL,
-    club_id INT REFERENCES clubs(id) ON DELETE CASCADE
+    club_id INT REFERENCES clubs(id),
+    capacity INT DEFAULT 100, -- Optional
+    venue VARCHAR(255) NOT NULL
 );
 
--- Create the rsvps table
+-- Create the RSVPs table (tracks event attendance)
 CREATE TABLE rsvps (
-    student_id INT NOT NULL,
-    event_id INT NOT NULL,
-    PRIMARY KEY (student_id, event_id),
-    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES students(id),
+    event_id INT REFERENCES events(id),
+    num_tickets INT NOT NULL DEFAULT 1,
+    UNIQUE (student_id, event_id) -- Each student can RSVP once per event
 );
 
--- Create the admins table
-CREATE TABLE admins (
+-- Create the funding table (tracks funding applications for clubs)
+CREATE TABLE fundings (
     id SERIAL PRIMARY KEY,
-    student_id INT NOT NULL,
+    club_id INT REFERENCES clubs(id),
+    description TEXT,
+    amount_requested NUMERIC(10, 2),
+    status VARCHAR(50) DEFAULT 'In Draft', -- 'In Draft', 'Submitted', 'Approved', 'Rejected'
+    UNIQUE (club_id) -- Only one funding application per club per semester
+);
+
+CREATE TABLE memberships (
+    id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES students(id) ON DELETE CASCADE,
     club_id INT REFERENCES clubs(id) ON DELETE CASCADE
 );
 
-CREATE TABLE students (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
-);
-
--- Insert sample data into clubs
-INSERT INTO clubs (name) VALUES ('Tech Club'), ('Art Club'), ('Science Club');
-
--- Insert sample data into events
-INSERT INTO events (title, description, event_date, club_id) 
+-- Insert sample students
+INSERT INTO students (username, email, password, role) 
 VALUES 
-('Tech Talk', 'A talk about the latest in tech.', '2024-09-01', 1),
-('Art Exhibition', 'An exhibition of student art.', '2024-09-10', 2),
-('Science Fair', 'Showcasing student science projects.', '2024-09-20', 3);
+('Alice Johnson', 'alice.johnson@unimelb.edu.au', 'password123', 'student'),
+('Bob Smith', 'bob.smith@unimelb.edu.au', 'password123', 'admin'),
+('Charlie Brown', 'charlie.brown@unimelb.edu.au', 'password123', 'student');
 
--- Insert sample data into rsvps
-INSERT INTO rsvps (student_id, event_id) VALUES (1, 1), (2, 2), (3, 3);
+-- Insert sample clubs
+INSERT INTO clubs (name) 
+VALUES 
+('Computer Science Club'),
+('Mathematics Club'),
+('Robotics Club');
 
--- Insert sample data into admins
-INSERT INTO admins (student_id, club_id) VALUES (1, 1), (2, 2), (3, 3);
+-- Insert sample admins (linking students to clubs as admins)
+INSERT INTO admins (student_id, club_id) 
+VALUES 
+((SELECT id FROM students WHERE email = 'bob.smith@unimelb.edu.au'), (SELECT id FROM clubs WHERE name = 'Computer Science Club')),
+((SELECT id FROM students WHERE email = 'alice.johnson@unimelb.edu.au'), (SELECT id FROM clubs WHERE name = 'Mathematics Club'));
+
+-- Insert sample events (note event_date now uses just the date, without time)
+INSERT INTO events (title, description, event_date, club_id, capacity, venue) 
+VALUES 
+('Introduction to Python', 'A beginner workshop on Python programming.', '2024-10-05', (SELECT id FROM clubs WHERE name = 'Computer Science Club'), 100, 'Room 101'),
+('Maths Olympiad Training', 'Training session for the national math olympiad.', '2024-10-10', (SELECT id FROM clubs WHERE name = 'Mathematics Club'), 50, 'Math Building'),
+('Robotics 101', 'Learn how to build simple robots.', '2024-11-01', (SELECT id FROM clubs WHERE name = 'Robotics Club'), 30, 'Robotics Lab');
+
+-- Insert sample RSVPs (students registering for events)
+INSERT INTO rsvps (student_id, event_id, num_tickets) 
+VALUES 
+((SELECT id FROM students WHERE email = 'alice.johnson@unimelb.edu.au'), (SELECT id FROM events WHERE title = 'Introduction to Python'), 1),
+((SELECT id FROM students WHERE email = 'bob.smith@unimelb.edu.au'), (SELECT id FROM events WHERE title = 'Maths Olympiad Training'), 2),
+((SELECT id FROM students WHERE email = 'charlie.brown@unimelb.edu.au'), (SELECT id FROM events WHERE title = 'Robotics 101'), 1);
+
+-- Insert sample funding applications
+INSERT INTO fundings (club_id, description, amount_requested, status) 
+VALUES 
+((SELECT id FROM clubs WHERE name = 'Computer Science Club'), 'Funding for Python workshops and competitions.', 5000.00, 'Submitted'),
+((SELECT id FROM clubs WHERE name = 'Robotics Club'), 'Funding for purchasing robotic kits.', 3000.00, 'In Draft');
