@@ -1,6 +1,7 @@
 package com.unimelb.swen90007.studentclub.dao;
 
 import com.unimelb.swen90007.studentclub.model.Club;
+import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
 import java.sql.Connection;
@@ -15,15 +16,19 @@ public class ClubDAO {
     private static final String LIST_CLUBS_SQL = "SELECT * FROM clubs";
     private static final String GET_CLUBS_FOR_STUDENT_SQL = "SELECT clubs.* FROM clubs INNER JOIN memberships ON clubs.id = memberships.club_id WHERE memberships.student_id = ?";
 
-    public List<Club> listAllClubs(UnitOfWork unitOfWork) throws SQLException {
-        Connection connection = unitOfWork.getConnection();
+    public List<Club> listAllClubs() throws SQLException {
         List<Club> clubs = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(LIST_CLUBS_SQL)) {
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(LIST_CLUBS_SQL)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                clubs.add(new Club(id, name));
+                Club club = new Club (
+                rs.getInt("id"),
+                rs.getString("name")
+                );
+                System.out.println("Club ID: " + club.getId() + ", Club Name: " + club.getName());
+                clubs.add(club);
             }
         }
         return clubs;

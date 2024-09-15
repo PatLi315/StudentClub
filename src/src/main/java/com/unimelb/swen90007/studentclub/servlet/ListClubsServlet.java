@@ -28,13 +28,16 @@ public class ListClubsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            UnitOfWork unitOfWork = new UnitOfWork(connection);
+        try {
+            List<Club> clubs = clubDAO.listAllClubs();
 
-            List<Club> clubs = clubDAO.listAllClubs(unitOfWork);
+            if (clubs == null || clubs.isEmpty()) {
+                System.out.println("No clubs retrieved from the database.");
+            } else {
+                System.out.println("Clubs retrieved: " + clubs.size());
+            }
+
             request.setAttribute("clubs", clubs);
-
-            unitOfWork.commit();
             request.getRequestDispatcher("listClubs.jsp").forward(request, response);
 
         } catch (SQLException e) {

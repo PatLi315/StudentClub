@@ -1,11 +1,17 @@
 <%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+<%@ page import="com.unimelb.swen90007.studentclub.model.Club" %>
+<%@ page import="java.util.List" %>
 <%@ page session="true" %>
 <%
-  Student student = (Student) session.getAttribute("student");
-  if (student == null) {
+  String studentName = (String) session.getAttribute("student");
+  if (studentName == null) {
     response.sendRedirect("login.jsp");
     return;
   }
+%>
+
+<%
+  List<Club> clubs = (List<Club>) request.getAttribute("clubs");
 %>
 
 <!DOCTYPE html>
@@ -61,13 +67,15 @@
 <body>
 <div class="container">
   <h1>All Clubs</h1>
-  <ul class="club-list">
-    <c:forEach var="club" items="${clubs}">
-      <li class="club-item">
-        <a href="clubDetails.jsp?clubId=${club.id}">${club.name}</a>
-      </li>
-    </c:forEach>
+  <% if (clubs != null && !clubs.isEmpty()) { %>
+  <ul>
+    <% for (Club club : clubs) { %>
+    <li><%= club.getName() %></li>
+    <% } %>
   </ul>
+  <% } else { %>
+  <p>No clubs available.</p>
+  <% } %>
 </div>
 </body>
 </html>

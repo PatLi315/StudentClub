@@ -52,8 +52,8 @@
 </head>
 <body>
 <nav>
-    <a href="listClubs.jsp">View Clubs</a>
-    <a href="displayEvents.jsp">View Events</a>
+    <a href="listClubs">View Clubs</a>
+    <a href="displayEvents">View Events</a>
     <a href="addEvent.jsp">Create Event</a> <!-- Added Add Event link here -->
     <a href="login.jsp">Login</a>
     <a href="register.jsp">Register</a>

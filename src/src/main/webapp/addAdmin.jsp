@@ -1,13 +1,12 @@
 <%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
 <%@ page session="true" %>
 <%
-    Student student = (Student) session.getAttribute("student");
-    if (student == null) {
+    String studentName = (String) session.getAttribute("student");
+    if (studentName == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
