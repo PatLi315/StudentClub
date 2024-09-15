@@ -2,6 +2,7 @@ package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.ClubDAO;
 import com.unimelb.swen90007.studentclub.dao.EventDAO;
+import com.unimelb.swen90007.studentclub.dao.StudentDAO;
 import com.unimelb.swen90007.studentclub.model.Event;
 import com.unimelb.swen90007.studentclub.model.Student;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import javax.lang.model.element.NestingKind;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,11 +24,13 @@ public class DisplayEventsServlet extends HttpServlet {
 
     private EventDAO eventDAO;
     private ClubDAO clubDAO;
+    private StudentDAO studentDAO;
 
     @Override
     public void init() {
         eventDAO = new EventDAO();
         clubDAO = new ClubDAO();
+        studentDAO = new StudentDAO();
     }
 
     @Override
@@ -39,12 +43,14 @@ public class DisplayEventsServlet extends HttpServlet {
             return;
         }
 
-        Student loggedInStudent = (Student) session.getAttribute("student");
+        String loggedInStudent = (String) session.getAttribute("student");
+
 
         try (Connection connection = DatabaseConnection.getConnection()) {
             UnitOfWork unitOfWork = new UnitOfWork(connection);
 
-            List<Event> eventsForStudent = eventDAO.getEventsForStudentClubs(loggedInStudent.getId(), unitOfWork);
+            int loggedInStudentId = studentDAO.getStudentId(loggedInStudent, unitOfWork);
+            List<Event> eventsForStudent = eventDAO.getEventsForStudentClubs(loggedInStudentId, unitOfWork);
             request.setAttribute("events", eventsForStudent);
 
             unitOfWork.commit();

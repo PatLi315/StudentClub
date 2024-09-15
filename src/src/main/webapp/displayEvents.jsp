@@ -1,4 +1,6 @@
 <%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+<%@ page import="com.unimelb.swen90007.studentclub.model.Event" %>
+<%@ page import="java.util.List" %>
 <%@ page session="true" %>
 <%
     String studentName = (String) session.getAttribute("student");
@@ -6,6 +8,10 @@
         response.sendRedirect("login.jsp");
         return;
     }
+%>
+
+<%
+    List<Event> events = (List<Event>) request.getAttribute("events");
 %>
 
 <!DOCTYPE html>
@@ -81,14 +87,15 @@
 <div class="container">
     <h1>Upcoming Events</h1>
     <ul class="event-list">
-        <c:forEach var="event" items="${events}">
-            <li class="event-item">
-                <a href="eventDetails.jsp?eventId=${event.id}">${event.title}</a>
-                <p class="event-date">${event.eventDate}</p>
-                <p>${event.description}</p>
-                <a href="rsvpEvent.jsp?eventId=${event.id}" class="rsvp-btn">RSVP</a>
-            </li>
-        </c:forEach>
+        <% if (events != null && !events.isEmpty()) { %>
+        <ul>
+            <% for (Event event : events) { %>
+            <li><%= event.getTitle() %></li>
+            <% } %>
+        </ul>
+        <% } else { %>
+        <p>No events available.</p>
+        <% } %>
     </ul>
 </div>
 </body>

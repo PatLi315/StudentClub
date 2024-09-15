@@ -1,7 +1,6 @@
 package com.unimelb.swen90007.studentclub.dao;
 
 import com.unimelb.swen90007.studentclub.model.Student;
-import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
 import java.sql.Connection;
@@ -15,11 +14,12 @@ public class StudentDAO {
     private static final String VALIDATE_LOGIN_SQL = "SELECT * FROM students WHERE username = ? AND password = ?";
     private static final String REGISTER_SQL = "INSERT INTO students (username, password, email, role) VALUES (?, ?, ?, ?)";
     private static final String CHECK_USERNAME_SQL = "SELECT COUNT(*) FROM students WHERE username = ?";
+    private static final String GET_STUDENT_ID_SQL = "SELECT id FROM students WHERE username = ?";
 
-    public Student getStudentById(int studentId, UnitOfWork unitOfWork) throws SQLException {
+    public Student getStudentByName(int studentName, UnitOfWork unitOfWork) throws SQLException {
         Connection connection = unitOfWork.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
-            preparedStatement.setInt(1, studentId);
+            preparedStatement.setInt(1, studentName);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("id");
@@ -32,6 +32,20 @@ public class StudentDAO {
             }
         }
         return null;
+    }
+
+    public int getStudentId(String studentName, UnitOfWork unitOfWork) throws SQLException {
+        Connection connection = unitOfWork.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENT_ID_SQL)) {
+            preparedStatement.setString(1, studentName);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+
+                return id;
+            }
+        }
+        return -1;
     }
 
     public void registerStudent(Student student, UnitOfWork unitOfWork) throws SQLException {
