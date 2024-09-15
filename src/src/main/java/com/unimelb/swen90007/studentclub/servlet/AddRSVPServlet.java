@@ -1,8 +1,8 @@
 package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.RSVPDAO;
+import com.unimelb.swen90007.studentclub.model.Person;
 import com.unimelb.swen90007.studentclub.model.RSVP;
-import com.unimelb.swen90007.studentclub.model.Student;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
@@ -35,7 +35,7 @@ public class AddRSVPServlet extends HttpServlet {
             return;
         }
 
-        Student loggedInStudent = (Student) session.getAttribute("student");
+        Person loggedInStudent = (Person) session.getAttribute("student");
         int eventId = Integer.parseInt(request.getParameter("eventId"));
         int tickets = Integer.parseInt(request.getParameter("tickets"));
 

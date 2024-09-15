@@ -1,4 +1,4 @@
-<%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+<%@ page import="com.unimelb.swen90007.studentclub.model.RegularStudent" %>
 <%@ page session="true" %>
 <%
   String studentName = (String) session.getAttribute("student");

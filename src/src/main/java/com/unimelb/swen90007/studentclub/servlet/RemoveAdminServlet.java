@@ -1,12 +1,11 @@
 package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.AdminDAO;
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.Person;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +35,7 @@ public class RemoveAdminServlet extends HttpServlet {
         }
 
         // Get the logged-in student
-        Student loggedInStudent = (Student) session.getAttribute("student");
+        Person loggedInStudent = (Person) session.getAttribute("student");
         int clubId = (int) session.getAttribute("clubId"); // Assuming clubId is stored in session
         int studentIdToRemove = Integer.parseInt(request.getParameter("studentId"));
 

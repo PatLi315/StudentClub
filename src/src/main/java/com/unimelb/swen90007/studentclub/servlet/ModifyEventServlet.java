@@ -2,7 +2,7 @@ package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.EventDAO;
 import com.unimelb.swen90007.studentclub.model.Event;
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.Person;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
@@ -36,7 +36,7 @@ public class ModifyEventServlet extends HttpServlet {
             return;
         }
 
-        Student loggedInStudent = (Student) session.getAttribute("student");
+        Person loggedInStudent = (Person) session.getAttribute("student");
 
         int eventId = Integer.parseInt(request.getParameter("eventId"));
         String title = request.getParameter("title");

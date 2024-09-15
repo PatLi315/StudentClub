@@ -1,13 +1,13 @@
 package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.StudentDAO;
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.Person;
+import com.unimelb.swen90007.studentclub.model.RegularStudent;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 import com.unimelb.swen90007.studentclub.util.PasswordUtils;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
@@ -44,7 +44,7 @@ public class RegisterServlet extends HttpServlet {
             unitOfWork.commit();
 
             // Register the student
-            Student newStudent = new Student(username, hashedPassword, email);
+            Person newStudent = new RegularStudent(username, hashedPassword, email);
             studentDAO.registerStudent(newStudent, unitOfWork);
 
             // Commit the unit of work

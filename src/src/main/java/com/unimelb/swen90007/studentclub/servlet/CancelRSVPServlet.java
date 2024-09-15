@@ -1,7 +1,7 @@
 package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.RSVPDAO;
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.Person;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
@@ -35,7 +35,7 @@ public class CancelRSVPServlet extends HttpServlet {
         }
 
         int eventId = Integer.parseInt(request.getParameter("eventId"));
-        Student loggedInStudent = (Student) session.getAttribute("student");
+        Person loggedInStudent = (Person) session.getAttribute("student");
 
         try (Connection connection = DatabaseConnection.getConnection()) {
             UnitOfWork unitOfWork = new UnitOfWork(connection);

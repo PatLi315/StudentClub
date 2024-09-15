@@ -1,4 +1,4 @@
-<%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+<%@ page import="com.unimelb.swen90007.studentclub.model.RegularStudent" %>
 <%@ page import="com.unimelb.swen90007.studentclub.model.Event" %>
 <%@ page import="java.util.List" %>
 <%@ page session="true" %>

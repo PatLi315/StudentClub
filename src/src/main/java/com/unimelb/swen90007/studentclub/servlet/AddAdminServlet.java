@@ -2,7 +2,7 @@ package com.unimelb.swen90007.studentclub.servlet;
 
 import com.unimelb.swen90007.studentclub.dao.AdminDAO;
 import com.unimelb.swen90007.studentclub.dao.ClubDAO;
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.Person;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
@@ -37,7 +37,7 @@ public class AddAdminServlet extends HttpServlet {
             return;
         }
 
-        Student loggedInStudent = (Student) session.getAttribute("student");
+        Person loggedInStudent = (Person) session.getAttribute("student");
         int clubId = Integer.parseInt(request.getParameter("clubId"));
         int studentIdToAdd = Integer.parseInt(request.getParameter("studentId"));
 

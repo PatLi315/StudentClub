@@ -1,4 +1,4 @@
-<%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+<%@ page import="com.unimelb.swen90007.studentclub.model.RegularStudent" %>
 
 <!DOCTYPE html>
 <html>

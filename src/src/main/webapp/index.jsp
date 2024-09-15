@@ -1,4 +1,4 @@
-<%@ page import="com.unimelb.swen90007.studentclub.model.Student" %>
+<%@ page import="com.unimelb.swen90007.studentclub.model.RegularStudent" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

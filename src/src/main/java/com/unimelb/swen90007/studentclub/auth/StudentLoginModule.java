@@ -1,7 +1,7 @@
 package com.unimelb.swen90007.studentclub.auth;
 
 import com.unimelb.swen90007.studentclub.dao.StudentDAO;
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.Person;
 import com.unimelb.swen90007.studentclub.util.DatabaseConnection;
 import com.unimelb.swen90007.studentclub.util.PasswordUtils;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class StudentLoginModule implements LoginModule {
 
     private CallbackHandler callbackHandler;
-    private Student student;
+    private Person student;
 
     @Override
     public boolean login() throws LoginException {

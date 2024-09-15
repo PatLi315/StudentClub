@@ -1,12 +1,16 @@
 package com.unimelb.swen90007.studentclub.dao;
 
-import com.unimelb.swen90007.studentclub.model.Student;
+import com.unimelb.swen90007.studentclub.model.FacultyAdmin;
+import com.unimelb.swen90007.studentclub.model.Person;
+import com.unimelb.swen90007.studentclub.model.RegularStudent;
 import com.unimelb.swen90007.studentclub.util.UnitOfWork;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static com.unimelb.swen90007.studentclub.model.FacultyAdmin.ADMIN;
 
 public class StudentDAO {
 
@@ -16,23 +20,23 @@ public class StudentDAO {
     private static final String CHECK_USERNAME_SQL = "SELECT COUNT(*) FROM students WHERE username = ?";
     private static final String GET_STUDENT_ID_SQL = "SELECT id FROM students WHERE username = ?";
 
-    public Student getStudentByName(int studentName, UnitOfWork unitOfWork) throws SQLException {
-        Connection connection = unitOfWork.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
-            preparedStatement.setInt(1, studentName);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String password = rs.getString("password");
-                String role = rs.getString("role");
-
-                return new Student(id, name, email, password, role);
-            }
-        }
-        return null;
-    }
+//    public Person getStudentByName(int studentName, UnitOfWork unitOfWork) throws SQLException {
+//        Connection connection = unitOfWork.getConnection();
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENT_BY_ID_SQL)) {
+//            preparedStatement.setInt(1, studentName);
+//            ResultSet rs = preparedStatement.executeQuery();
+//            if (rs.next()) {
+//                int id = rs.getInt("id");
+//                String name = rs.getString("name");
+//                String email = rs.getString("email");
+//                String password = rs.getString("password");
+//                String role = rs.getString("role");
+//
+//                return new RegularStudent(id, name, email, password);
+//            }
+//        }
+//        return null;
+//    }
 
     public int getStudentId(String studentName, UnitOfWork unitOfWork) throws SQLException {
         Connection connection = unitOfWork.getConnection();
@@ -48,7 +52,7 @@ public class StudentDAO {
         return -1;
     }
 
-    public void registerStudent(Student student, UnitOfWork unitOfWork) throws SQLException {
+    public void registerStudent(Person student, UnitOfWork unitOfWork) throws SQLException {
         Connection connection = unitOfWork.getConnection();
 
         unitOfWork.registerOperation(() -> {
@@ -76,9 +80,9 @@ public class StudentDAO {
         return false;
     }
 
-    public Student validateLogin(String username, String password, UnitOfWork unitOfWork) throws SQLException {
+    public Person validateLogin(String username, String password, UnitOfWork unitOfWork) throws SQLException {
         Connection connection = unitOfWork.getConnection(); // Get the connection from UnitOfWork
-        final Student[] student = {null}; // Create an array to hold the student
+        final Person[] student = {null}; // Create an array to hold the student
 
         unitOfWork.registerOperation(() -> {
             try (PreparedStatement preparedStatement = connection.prepareStatement(VALIDATE_LOGIN_SQL)) {
@@ -95,7 +99,11 @@ public class StudentDAO {
                     String role = rs.getString("role");
 
                     // Create and store a Student object
-                    student[0] = new Student(studentId, name, email, role);
+                    if (role.equals(ADMIN)) {
+                        student[0] = new FacultyAdmin(studentId, name, email, password);
+                    } else {
+                        student[0] = new RegularStudent(studentId, name, email, password);
+                    }
                 }
             } catch (SQLException e) {
                 throw new RuntimeException("Error validating login", e);
